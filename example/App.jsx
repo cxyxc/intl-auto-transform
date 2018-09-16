@@ -4,14 +4,14 @@ const FormItem = Form.Item;
 export class Add extends React.PureComponent {
   render() {
     const columns = [{
-      title: '用户名',
+      title: "用户名",
       dataIndex: 'username'
     }];
     return <Form>
             <Card>
                 <Row>
                     <Col>
-                        <FormItem label="整车销售">
+                        <FormItem label="企业编号">
                         </FormItem>
                     </Col>
                 </Row>

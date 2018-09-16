@@ -30,7 +30,7 @@ fs.recurseSync(currentDir, [
 const localizationKeys = Object.getOwnPropertyNames(manager.cache);
 const componentKeys = localizationKeys.filter(i => i.includes('.jsx'));
 const otherKeys = localizationKeys.filter(i => !i.includes('.jsx'));
-// console.log(manager.cache, localizationKeys, componentKeys, otherKeys);
+console.log(manager.cache);
 
 componentKeys.forEach(key => {
     // 生成各个组件对应的 json

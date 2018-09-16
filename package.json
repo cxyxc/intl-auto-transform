@@ -1,10 +1,10 @@
 {
-  "name": "deadly-simple-plugin-example",
+  "name": "intl-auto-transform",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "build": "babel ./src --out-dir ./lib --copy-files"
+  "bin": {
+    "start-runner": "index.js"
   },
   "keywords": [],
   "author": "",
