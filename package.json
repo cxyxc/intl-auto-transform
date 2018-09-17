@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "start-runner": "index.js"
+    "intl-auto": "index.js"
   },
   "keywords": [],
   "author": "",
