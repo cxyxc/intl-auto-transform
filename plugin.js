@@ -75,6 +75,34 @@ const ImportDeclaration = ({t, filename, prefix}) => path => {
   }
 }
 
+const AssignmentExpression = ({t, filename}) => path => {
+  // 寻找 propTypes 添加 getString
+  if (path.node.left.type === 'MemberExpression' &&
+    path.node.left.property.type === 'Identifier' &&
+    path.node.left.property.name === 'propTypes') {
+      let flag = false;
+      path.node.right.properties.forEach(element => {
+        if(element.type === 'ObjectProperty' && element.key.name === 'getString')
+          flag = true;
+      });
+      if(flag) return;
+
+      path.replaceWith(
+        t.assignmentExpression(
+          '=',
+          path.node.left,
+          t.objectExpression([
+            ...path.node.right.properties,
+            t.objectProperty(
+              t.identifier('getString'),
+              t.memberExpression(t.identifier('propTypes'), t.identifier('func'))
+            )
+          ])
+        )
+      );
+  }
+};
+
 module.exports = (filename, prefix) => function({ types: t }) {
     manager.cache[filename] = {};
     return {
@@ -86,7 +114,10 @@ module.exports = (filename, prefix) => function({ types: t }) {
         TemplateLiteral: TemplateLiteral({t, filename}),
         // 获取到导出组件的语句
         Identifier: Identifier({t, filename}),
+        // 添加 import {localize} from '...';
         ImportDeclaration: ImportDeclaration({t, filename, prefix}),
+        // 处理 propTypes
+        AssignmentExpression: AssignmentExpression({t, filename}),
       }
   };
 };
