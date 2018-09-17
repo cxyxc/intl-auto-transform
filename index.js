@@ -5,16 +5,10 @@ const babel = require('@babel/core');
 const path = require('path');
 const manager = require('./manager');
 const fs = require('file-system');
-const CLIEngine = require('eslint').CLIEngine;
 
 const currentDir = process.cwd();
 
-// 获取 ESLint 配置
-const cli = new CLIEngine({
-    envs: ['browser', 'mocha'],
-    useEslintrc: false,
-    rules: require('./eslintrc')
-});
+const format = require("prettier-eslint");
 
 fs.recurseSync(currentDir, [
     '**/*.js',
@@ -36,14 +30,22 @@ fs.recurseSync(currentDir, [
             babel.createConfigItem(require('./plugin')(filename, prefix)),
         ]
     });
-    fs.writeFile(filepath, code, err => err);
+
+    const options = {
+        text: code,
+        eslintConfig: require('./eslintrc'),
+        prettierOptions: {
+          bracketSpacing: true
+        },
+        fallbackPrettierOptions: {
+          singleQuote: false
+        }
+    };
+      
+    const formatted = format(options);
+
+    fs.writeFile(filepath, formatted, err => err);
 });
-
-// lint myfile.js and all files in lib/
-const report = cli.executeOnFiles([currentDir]);
-
-// output fixes to disk
-CLIEngine.outputFixes(report);
 
 // 生成 localizations 多语言文件包（中文）
 const localizationKeys = Object.getOwnPropertyNames(manager.cache);

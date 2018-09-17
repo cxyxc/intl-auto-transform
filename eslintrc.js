@@ -1,4 +1,7 @@
+const path = require('path');
+
 module.exports = {
+  "parser": path.join(__dirname, 'node_modules', 'babel-eslint'),
   "env": {
     "browser": true,
     "commonjs": true,
@@ -25,6 +28,9 @@ module.exports = {
     },
     "sourceType": "module"
   },
+  "plugins": [
+    "react"
+  ],
   "rules": {
     "indent": [
       2,
