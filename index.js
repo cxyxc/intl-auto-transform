@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+'use strict';
+
 const babel = require('@babel/core');
 const path = require('path');
 const manager = require('./manager');
