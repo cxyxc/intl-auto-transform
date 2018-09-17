@@ -49,18 +49,11 @@ fs.recurseSync(currentDir, [
 
 // 生成 localizations 多语言文件包（中文）
 const localizationKeys = Object.getOwnPropertyNames(manager.cache);
-const componentKeys = localizationKeys.filter(i => i.includes('.jsx'));
-const otherKeys = localizationKeys.filter(i => !i.includes('.jsx'));
 
-componentKeys.forEach(key => {
-    // 生成各个组件对应的 json
-    fs.writeFile(path.join(currentDir, 'localizations', key.replace('.jsx', '.zh-CN.json')),
-        JSON.stringify(manager.cache[key]), err => err);
+const fileContent = {};
+localizationKeys.forEach(key => {
+    Object.assign(fileContent, manager.cache[key]);
 });
-const otherFileContent = {};
-otherKeys.forEach(key => {
-    Object.assign(otherFileContent, manager.cache[key]);
-});
-// 生成 Other.json
-fs.writeFile(path.join(currentDir, 'localizations', 'Other.zh-CN.json'),
-    JSON.stringify(otherFileContent), err => err);
+// 生成 zh-CN.json
+fs.writeFile(path.join(currentDir, 'localizations', 'zh-CN.json'),
+    JSON.stringify(fileContent, null, 4), err => err);
