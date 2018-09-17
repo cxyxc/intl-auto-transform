@@ -2,6 +2,8 @@ const manager = require('./manager');
 const utils = require('./utils');
 const TemplateLiteral = require('./visitor/TemplateLiteral');
 
+const LOCALIZE = 'localize';
+
 const Literal = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
   const key = manager.setCache(filename, path.node.value);
@@ -39,7 +41,7 @@ const JSXText = ({t, filename}) => path => {
 const Identifier = ({t, filename}) => path => {
   let flag = false;
   path.findParent(parentPath => {
-    if(parentPath.isCallExpression() && parentPath.node.callee.name === 'localize') {
+    if(parentPath.isCallExpression() && parentPath.node.callee.name === LOCALIZE) {
       // 发现已添加 localize()
       flag = true; return;
     }
@@ -52,7 +54,7 @@ const Identifier = ({t, filename}) => path => {
         // 此处认为大写字母开头的为组件
         if(utils.isBF(path.node.name[0])) {
           path.replaceWith(
-            t.callExpression(t.identifier('localize'), [path.node])
+            t.callExpression(t.identifier(LOCALIZE), [path.node])
           );
         }
       }
@@ -62,7 +64,18 @@ const Identifier = ({t, filename}) => path => {
   }
 };
 
-module.exports = filename => function({ types: t }) {
+const ImportDeclaration = ({t, filename, prefix}) => path => {
+  if (path.node.source.value === 'react') {
+    // 在 import react 后添加 import localize
+    path.insertAfter(
+      t.importDeclaration([
+        t.importSpecifier(t.identifier(LOCALIZE), t.identifier(LOCALIZE))
+      ], t.stringLiteral(`${prefix}${LOCALIZE}`))
+    );
+  }
+}
+
+module.exports = (filename, prefix) => function({ types: t }) {
     manager.cache[filename] = {};
     return {
       name: "intl-replace-plugin",
@@ -73,6 +86,7 @@ module.exports = filename => function({ types: t }) {
         TemplateLiteral: TemplateLiteral({t, filename}),
         // 获取到导出组件的语句
         Identifier: Identifier({t, filename}),
+        ImportDeclaration: ImportDeclaration({t, filename, prefix}),
       }
   };
 };

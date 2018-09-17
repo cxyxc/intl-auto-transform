@@ -17,14 +17,14 @@ fs.recurseSync(currentDir, [
     if(!filename) return;
 
     // 计算相对路径前缀
-    const prefixLength = filepath.replace(currentDir, '').split('/').filter(i => i).length;
+    const prefixLength = filepath.replace(currentDir, '').split('/').filter(i => i).length - 1;
     const prefixArray = [];
     for(let i = 0; i < prefixLength; i++)
         prefixArray.push('..');
     const prefix = prefixArray.length > 0 ? `${prefixArray.join('/')}/` : './';
 
     // 核心 babel 替换逻辑
-    const {code} = babel.transformFileSync(filepath, {
+    let {code} = babel.transformFileSync(filepath, {
         babelrc: false,
         plugins: [
             path.join(__dirname, 'node_modules', '@babel/plugin-syntax-object-rest-spread'),
@@ -35,7 +35,11 @@ fs.recurseSync(currentDir, [
     });
 
     // 未发生过中文替换时，不保存代码
-    if(Object.getOwnPropertyNames(manager.cache[filename]) === 0) return;
+    if(Object.getOwnPropertyNames(manager.cache[filename]).length === 0) return;
+    // 根据文件名添加 import {getString} from './localize';
+    if(['actions', 'state', 'reducers', 'routes', 'constants'].includes(filename.split('.')[0])) {
+        code = `import {getString} from '${prefix}localize'\n` + code;
+    }
 
     // ESLint 格式化
     const options = {
