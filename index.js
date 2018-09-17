@@ -30,9 +30,9 @@ fs.recurseSync(currentDir, [
     const {code} = babel.transformFileSync(filepath, {
         babelrc: false,
         plugins: [
-            '@babel/plugin-syntax-object-rest-spread',
-            '@babel/plugin-syntax-class-properties',
-            'syntax-jsx',
+            path.join(__dirname, 'node_modules', '@babel/plugin-syntax-object-rest-spread'),
+            path.join(__dirname, 'node_modules', '@babel/plugin-syntax-class-properties'),
+            path.join(__dirname, 'node_modules', 'babel-plugin-syntax-jsx'),
             babel.createConfigItem(require('./plugin')(filename, prefix)),
         ]
     });
