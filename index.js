@@ -15,12 +15,15 @@ fs.recurseSync(currentDir, [
     '**/*.jsx',
 ], (filepath, relative, filename) => {
     if(!filename) return;
+
+    // 计算相对路径前缀
     const prefixLength = filepath.replace(currentDir, '').split('/').filter(i => i).length;
     const prefixArray = [];
     for(let i = 0; i < prefixLength; i++)
         prefixArray.push('..');
-    
     const prefix = prefixArray.length > 0 ? `${prefixArray.join('/')}/` : './';
+
+    // 核心 babel 替换逻辑
     const {code} = babel.transformFileSync(filepath, {
         babelrc: false,
         plugins: [
@@ -31,29 +34,28 @@ fs.recurseSync(currentDir, [
         ]
     });
 
+    // 未发生过中文替换时，不保存代码
+    if(Object.getOwnPropertyNames(manager.cache[filename]) === 0) return;
+
+    // ESLint 格式化
     const options = {
         text: code,
-        eslintConfig: require('./eslintrc'),
-        prettierOptions: {
-          bracketSpacing: true
-        },
-        fallbackPrettierOptions: {
-          singleQuote: false
-        }
+        eslintConfig: require('./eslintrc')
     };
-      
     const formatted = format(options);
 
+    // 保存代码
     fs.writeFile(filepath, formatted, err => err);
 });
 
 // 生成 localizations 多语言文件包（中文）
 const localizationKeys = Object.getOwnPropertyNames(manager.cache);
-
 const fileContent = {};
 localizationKeys.forEach(key => {
     Object.assign(fileContent, manager.cache[key]);
 });
-// 生成 zh-CN.json
 fs.writeFile(path.join(currentDir, 'localizations', 'zh-CN.json'),
     JSON.stringify(fileContent, null, 4), err => err);
+
+// 复制 copy 目录的文件到当前节点
+fs.copyFile(path.join(__dirname, './copy/localize.js'), `${currentDir}/localize.js`);

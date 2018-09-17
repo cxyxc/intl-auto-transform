@@ -5,6 +5,18 @@ function guid() {
     return (S4()+S4());
 }
 
+// 是否包含中文
+function hasChinese(str) {
+    return escape(str).indexOf('%u') !== -1
+}
+
+// 是否是大写字母
+function isBF(str) {
+    return str >= 'A' && str <= 'Z'; 
+}
+
 module.exports = {
-    guid
+    guid,
+    hasChinese,
+    isBF
 };
