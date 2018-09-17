@@ -36,6 +36,18 @@ module.exports = filename => function({ types: t }) {
             return ;
           }
         },
+        JSXText(path) {
+          if(!hasChinese(path.node.value)) return;
+          // 生成 guid
+          const key = utils.guid();
+          // 缓存汉字
+          manager.cache[filename][key] = path.node.value;
+            path.replaceWith(
+              t.jSXExpressionContainer(
+                t.callExpression(t.identifier('getString'), [t.stringLiteral(key)])
+              )
+          );
+        },
         // 处理字符串模板
         TemplateLiteral(path) {
           const {quasis: lastQuasis, expressions: lastExpressions} = path.node;

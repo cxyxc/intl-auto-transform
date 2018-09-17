@@ -19,6 +19,8 @@ fs.recurseSync(currentDir, [
     const {code} = babel.transformFileSync(filepath, {
         babelrc: false,
         plugins: [
+            "@babel/plugin-syntax-object-rest-spread",
+            "@babel/plugin-syntax-class-properties",
             "syntax-jsx",
             babel.createConfigItem(require("./plugin")(filename, prefix)),
         ]
