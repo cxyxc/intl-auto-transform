@@ -26,7 +26,9 @@ export class App extends PureComponent {
                     <Switch>
                         <Route path={routes.query.url()} exact render={props =>
                             <div>
-                                <Card> <QueryPanel history={props.history}/></Card>
+                                <Card> <QueryPanel history={props.history}/>
+                                    你好啊
+                                </Card>
                                 <Card> <TablePanel history={props.history}/></Card>
                             </div>} />
                         <Route path={routes.add.url()} exact render={props =>

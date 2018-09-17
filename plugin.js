@@ -1,19 +1,7 @@
 const manager = require('./manager');
 const utils = require('./utils');
-
 function hasChinese(str) {
   return escape(str).indexOf('%u') !== -1
-}
-
-function managerCache(filename, chinese) {
-  for(const k in manager.cache[filename]) {
-    if(manager.cache[filename][k] === chinese)
-      return k;
-  }
-  const key = `${filename.split('.')[0]}.${utils.guid()}`;
-  // 缓存汉字
-  manager.cache[filename][key] = chinese;
-  return key;
 }
 
 module.exports = filename => function({ types: t }) {
@@ -23,7 +11,7 @@ module.exports = filename => function({ types: t }) {
       visitor: {
         Literal(path) {
           if(!hasChinese(path.node.value)) return;
-          const key = managerCache(filename, path.node.value);
+          const key = manager.setCache(filename, path.node.value);
           
           // 父节点是 JSX 属性时
           if(path.parent.type === 'JSXAttribute') {
@@ -46,7 +34,7 @@ module.exports = filename => function({ types: t }) {
         },
         JSXText(path) {
           if(!hasChinese(path.node.value)) return;
-          const key = managerCache(filename, path.node.value);
+          const key = manager.setCache(filename, path.node.value);
             path.replaceWith(
               t.jSXExpressionContainer(
                 t.callExpression(t.identifier('getString'), [t.stringLiteral(key)])
@@ -88,7 +76,7 @@ module.exports = filename => function({ types: t }) {
           });
 
           const generateExpressions = () => {
-            const key = managerCache(filename, chineseQuasis.shift().value.raw);
+            const key = manager.setCache(filename, chineseQuasis.shift().value.raw);
             newExpressions.push(
               t.callExpression(t.identifier('getString'), [t.stringLiteral(key)])
             );
