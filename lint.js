@@ -10,7 +10,6 @@ fs.recurseSync(currentDir, [
     '**/*.jsx',
 ], (filepath, relative, filename) => {
     if(!filename) return;
-    console.log(filepath);
     // ESLint 格式化
     const options = {
         text: fs.readFileSync(filepath).toString(),

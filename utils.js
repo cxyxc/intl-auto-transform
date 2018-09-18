@@ -46,10 +46,16 @@ const propsGetStringT = (t, key) => t.callExpression(
   [t.stringLiteral(key)]
 );
 
+// 首字母大写转为驼峰
+function toHump(string) {
+  return `${string.slice(0, 1).toLocaleLowerCase()}${string.slice(1)}`;
+}
+
 module.exports = {
     guid,
     hasChinese,
     isBF,
+    toHump,
     pathInReact,
     getStringT,
     propsGetStringT

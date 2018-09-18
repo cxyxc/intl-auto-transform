@@ -4,9 +4,9 @@ const TemplateLiteral = require('./visitor/TemplateLiteral');
 
 const LOCALIZE = 'localize';
 
-const Literal = ({t, filename}) => path => {
+const Literal = (t, filename) => path => {
   if(!utils.hasChinese(path.node.value)) return;
-  const key = manager.setCache(filename, path.node.value);
+  const key = manager.setCache(path, filename, path.node.value);
   
   // 父节点是 import 语句时不做处理
   if(path.parent.type === 'ImportDeclaration') return;
@@ -32,15 +32,15 @@ const Literal = ({t, filename}) => path => {
   return ;
 }
 
-const JSXText = ({t, filename}) => path => {
+const JSXText = (t, filename) => path => {
   if(!utils.hasChinese(path.node.value)) return;
-  const key = manager.setCache(filename, path.node.value);
+  const key = manager.setCache(path, filename, path.node.value);
   path.replaceWith(
     t.jSXExpressionContainer(utils.propsGetStringT(t, key))
   );
 };
 
-const Identifier = ({t, filename}) => path => {
+const Identifier = (t, filename) => path => {
   let flag = false;
   path.findParent(parentPath => {
     if(parentPath.isCallExpression() && parentPath.node.callee.name === LOCALIZE) {
@@ -72,7 +72,7 @@ const Identifier = ({t, filename}) => path => {
   }
 };
 
-const ImportDeclaration = ({t, filename, prefix}) => path => {
+const ImportDeclaration = (t, filename, prefix) => path => {
   if (path.node.source.value === 'react') {
     // 在 import react 后添加 import localize
     path.insertAfter(
@@ -83,7 +83,7 @@ const ImportDeclaration = ({t, filename, prefix}) => path => {
   }
 }
 
-const AssignmentExpression = ({t, filename}) => path => {
+const AssignmentExpression = (t, filename) => path => {
   // 寻找 propTypes 添加 getString
   if (path.node.left.type === 'MemberExpression' &&
     path.node.left.property.type === 'Identifier' &&
@@ -115,16 +115,16 @@ module.exports = (filename, prefix) => function({ types: t }) {
     return {
       name: "intl-replace-plugin",
       visitor: {
-        Literal: Literal({t, filename}),
-        JSXText: JSXText({t, filename}),
+        Literal: Literal(t, filename),
+        JSXText: JSXText(t, filename),
         // 处理字符串模板
-        TemplateLiteral: TemplateLiteral({t, filename}),
+        TemplateLiteral: TemplateLiteral(t, filename),
         // 获取到导出组件的语句
-        Identifier: Identifier({t, filename}),
+        Identifier: Identifier(t, filename),
         // 添加 import {localize} from '...';
-        ImportDeclaration: ImportDeclaration({t, filename, prefix}),
+        ImportDeclaration: ImportDeclaration(t, filename, prefix),
         // 处理 propTypes
-        AssignmentExpression: AssignmentExpression({t, filename}),
+        AssignmentExpression: AssignmentExpression(t, filename),
       }
   };
 };

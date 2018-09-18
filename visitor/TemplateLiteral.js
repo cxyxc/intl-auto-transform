@@ -1,7 +1,7 @@
 const utils = require('../utils');
 const manager = require('../manager');
 
-const TemplateLiteral  = ({t, filename}) => path => {
+const TemplateLiteral  = (t, filename) => path => {
     const {quasis: lastQuasis, expressions: lastExpressions} = path.node;
 
     let flag = true;
@@ -35,7 +35,7 @@ const TemplateLiteral  = ({t, filename}) => path => {
     });
 
     const generateExpressions = () => {
-        const key = manager.setCache(filename, chineseQuasis.shift().value.raw);
+        const key = manager.setCache(path, filename, chineseQuasis.shift().value.raw);
         const isInReact = utils.pathInReact(path);
         newExpressions.push(
             (
