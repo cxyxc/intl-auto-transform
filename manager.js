@@ -21,8 +21,6 @@ function setCache(filename, chinese) {
     }
     const keyPrefix = filename.split('.')[0];
 
-    console.log(config.keyType)
-
     // 根据 keyType 决定产出语言包的 key 值
     // TODO: 留待后续完善
     let id = '';
