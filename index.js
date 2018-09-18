@@ -37,7 +37,7 @@ fs.recurseSync(currentDir, [
     // 未发生过中文替换时，不保存代码
     if(Object.getOwnPropertyNames(manager.cache[filename]).length === 0) return;
     // 根据文件名添加 import {getString} from './localize';
-    if(['actions', 'state', 'reducers', 'routes', 'constants'].includes(filename.split('.')[0])) {
+    if(path.extname(filename) === '.js') {
         code = `import {getString} from '${prefix}localize'\n` + code;
     }
 
