@@ -1,6 +1,9 @@
 export const submit = () => (dispatch, getState) => {
     const assignment = getState().getIn(['page', 'appState', 'assignment']).toJS();
     const emptyErrors = [];
+    
+    const string = `${A}客户${B}`
+
     if(!assignment || !assignment.customerId)
         emptyErrors.push('客户');
     if(!assignment || !assignment.type)

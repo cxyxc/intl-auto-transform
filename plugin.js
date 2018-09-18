@@ -4,22 +4,6 @@ const TemplateLiteral = require('./visitor/TemplateLiteral');
 
 const LOCALIZE = 'localize';
 
-// getString()
-const getStringT =  (t, key) => t.callExpression(t.identifier('getString'), [t.stringLiteral(key)]);
-
-// this.props.getString()
-const propsGetStringT = (t, key) => t.callExpression(
-  t.memberExpression(
-    t.memberExpression(
-      t.thisExpression(),
-      t.identifier('props')
-    ),
-    t.identifier('getString')
-  ),
-  [t.stringLiteral(key)]
-);
-
-
 const Literal = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
   const key = manager.setCache(filename, path.node.value);
@@ -28,30 +12,20 @@ const Literal = ({t, filename}) => path => {
   if(path.parent.type === 'JSXAttribute') {
     path.replaceWith(
         t.jSXExpressionContainer(
-          propsGetStringT(t, key)
+          utils.propsGetStringT(t, key)
         )
     );
     return ;
   }
 
-  let isInReact = false;
-  // 寻找并判断当前是否在 React 组件内部    
-  path.findParent(parentPath => {
-    if(parentPath.isClassDeclaration() &&
-      parentPath.node.superClass
-    ) {
-      // 此处认为在 Class 内部且有 superClass 即为组件
-      // TODO: 完善此处逻辑
-      isInReact = true;
-    }
-  });
+  let isInReact = utils.pathInReact(path);
 
   if(isInReact) {
-    path.replaceWith(propsGetStringT(t, key));
+    path.replaceWith(utils.propsGetStringT(t, key));
     return;
-  } 
+  }
 
-  path.replaceWith(getStringT(t, key));
+  path.replaceWith(utils.getStringT(t, key));
   return ;
 }
 
@@ -59,7 +33,7 @@ const JSXText = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
   const key = manager.setCache(filename, path.node.value);
   path.replaceWith(
-    t.jSXExpressionContainer(propsGetStringT(t, key))
+    t.jSXExpressionContainer(utils.propsGetStringT(t, key))
   );
 };
 
@@ -75,6 +49,12 @@ const Identifier = ({t, filename}) => path => {
   if (path.node.name === filename.split('.')[0]) {
     path.findParent(parentPath => {
       if(parentPath.isExportDefaultDeclaration()) {
+        // 针对 export default class XXX {} 的处理
+        if(parentPath.node.declaration.type === 'ClassDeclaration') {
+          // TODO: 暂不处理这种情况
+          return;
+        }
+
         // 对 export default 的组件进行 localize 包裹
         // 此处认为大写字母开头的为组件
         if(utils.isBF(path.node.name[0])) {

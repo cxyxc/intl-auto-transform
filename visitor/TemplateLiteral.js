@@ -36,8 +36,14 @@ const TemplateLiteral  = ({t, filename}) => path => {
 
     const generateExpressions = () => {
         const key = manager.setCache(filename, chineseQuasis.shift().value.raw);
+        const isInReact = utils.pathInReact(path);
+        console.log(isInReact);
         newExpressions.push(
-        t.callExpression(t.identifier('getString'), [t.stringLiteral(key)])
+            (
+                isInReact 
+                    ? utils.propsGetStringT(t, key)
+                    : utils.getStringT(t, key)
+            )
         );
     };
     if(chineseQuasisIndex[0] === 0)

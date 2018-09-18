@@ -13,12 +13,13 @@ import {createNotification} from 'Shared/utils/serverNotification';
 import 'ant-design-pro/dist/ant-design-pro.css';
 import NoMatchRoute from '../../common/NoMatchRoute';
 
-export class App extends PureComponent {
+class App extends PureComponent {
     componentDidUpdate(prevProps) {
         createNotification(this.props.notification, prevProps.notification);
     }
 
     render() {
+        const string = `${A}客户${B}`;
         return (
             <div>
                 <Route render={props => <Breadcrumb location={props.location} />} />
@@ -53,13 +54,3 @@ export class App extends PureComponent {
 App.propTypes = {
     notification: PropTypes.object
 };
-
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
-
-const getNotification = createSelector(state => state.getIn(['page', 'notification']), data => data.toJS());
-const mapStateToProps = state => ({
-    notification: getNotification(state)
-});
-
-export default connect(mapStateToProps)(App);
