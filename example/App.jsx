@@ -4,7 +4,7 @@ import QueryPanel from './QueryPanel';
 import TablePanel from './TablePanel';
 import DetailPage from './DetailPage';
 import AddPage from './AddPage';
-import UpdatePage from './UpdatePage';
+import UpdatePage from './中文';
 import {Card} from 'antd';
 import routes from './routes';
 import {Route, Switch} from 'react-router-dom';

@@ -8,6 +8,9 @@ const Literal = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
   const key = manager.setCache(filename, path.node.value);
   
+  // 父节点是 import 语句时不做处理
+  if(path.parent.type === 'ImportDeclaration') return;
+
   // 父节点是 JSX 属性时
   if(path.parent.type === 'JSXAttribute') {
     path.replaceWith(
