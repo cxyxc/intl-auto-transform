@@ -109,7 +109,6 @@ const AssignmentExpression = ({t, filename}) => path => {
 };
 
 module.exports = (filename, prefix) => function({ types: t }) {
-    manager.cache[filename] = {};
     return {
       name: "intl-replace-plugin",
       visitor: {

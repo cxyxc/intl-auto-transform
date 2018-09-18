@@ -5,10 +5,15 @@ const babel = require('@babel/core');
 const path = require('path');
 const manager = require('./manager');
 const fs = require('file-system');
-
+const argv = require('yargs').argv;
 const currentDir = process.cwd();
 
 const format = require("prettier-eslint");
+
+// 初始化 manager
+manager.init({
+    keyType: argv.key
+});
 
 fs.recurseSync(currentDir, [
     '**/*.js',
@@ -35,7 +40,7 @@ fs.recurseSync(currentDir, [
     });
 
     // 未发生过中文替换时，不保存代码
-    if(Object.getOwnPropertyNames(manager.cache[filename]).length === 0) return;
+    if(Object.getOwnPropertyNames(manager.getCache(filename)).length === 0) return;
     // 根据文件名添加 import {getString} from './localize';
     if(path.extname(filename) === '.js') {
         code = `import {getString} from '${prefix}localize'\n` + code;
@@ -53,10 +58,10 @@ fs.recurseSync(currentDir, [
 });
 
 // 生成 localizations 多语言文件包（中文）
-const localizationKeys = Object.getOwnPropertyNames(manager.cache);
+const localizationKeys = Object.getOwnPropertyNames(manager.getCache());
 const fileContent = {};
 localizationKeys.forEach(key => {
-    Object.assign(fileContent, manager.cache[key]);
+    Object.assign(fileContent, manager.getCache(key));
 });
 fs.writeFile(path.join(currentDir, 'localizations', 'zh-CN.json'),
     JSON.stringify(fileContent, null, 4), err => err);

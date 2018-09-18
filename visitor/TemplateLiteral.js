@@ -37,7 +37,6 @@ const TemplateLiteral  = ({t, filename}) => path => {
     const generateExpressions = () => {
         const key = manager.setCache(filename, chineseQuasis.shift().value.raw);
         const isInReact = utils.pathInReact(path);
-        console.log(isInReact);
         newExpressions.push(
             (
                 isInReact 
