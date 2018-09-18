@@ -1,4 +1,5 @@
 const utils = require('../utils');
+const manager = require('../manager');
 
 const TemplateLiteral  = ({t, filename}) => path => {
     const {quasis: lastQuasis, expressions: lastExpressions} = path.node;

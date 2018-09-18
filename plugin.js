@@ -8,17 +8,17 @@ const LOCALIZE = 'localize';
 const getStringT =  (t, key) => t.callExpression(t.identifier('getString'), [t.stringLiteral(key)]);
 
 // this.props.getString()
-const propsGetStringT = (t, key) => t.jSXExpressionContainer(
-  t.callExpression(
+const propsGetStringT = (t, key) => t.callExpression(
+  t.memberExpression(
     t.memberExpression(
-      t.memberExpression(
-        t.thisExpression(),
-        t.identifier('props')
-      ),
-      t.identifier('getString')
+      t.thisExpression(),
+      t.identifier('props')
     ),
-    [t.stringLiteral(key)])
+    t.identifier('getString')
+  ),
+  [t.stringLiteral(key)]
 );
+
 
 const Literal = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
@@ -28,7 +28,7 @@ const Literal = ({t, filename}) => path => {
   if(path.parent.type === 'JSXAttribute') {
     path.replaceWith(
         t.jSXExpressionContainer(
-          getStringT(t, key)
+          propsGetStringT(t, key)
         )
     );
     return ;
@@ -64,7 +64,9 @@ const Literal = ({t, filename}) => path => {
 const JSXText = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
   const key = manager.setCache(filename, path.node.value);
-  path.replaceWith(propsGetStringT(t, key));
+  path.replaceWith(
+    t.jSXExpressionContainer(propsGetStringT(t, key))
+  );
 };
 
 const Identifier = ({t, filename}) => path => {
