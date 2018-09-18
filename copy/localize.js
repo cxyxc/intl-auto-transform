@@ -4,4 +4,4 @@ const getLocalization = (category, language) => require(`./localizations/${langu
 
 export const localize = component => defaultLocalize(component, getLocalization);
 
-export const getString = getIntlString('salesStatement', getLocalization);
+export const getString = getIntlString(null, getLocalization);
