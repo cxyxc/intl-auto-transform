@@ -4,6 +4,22 @@ const TemplateLiteral = require('./visitor/TemplateLiteral');
 
 const LOCALIZE = 'localize';
 
+// getString()
+const getStringT =  (t, key) => t.callExpression(t.identifier('getString'), [t.stringLiteral(key)]);
+
+// this.props.getString()
+const propsGetStringT = (t, key) => t.jSXExpressionContainer(
+  t.callExpression(
+    t.memberExpression(
+      t.memberExpression(
+        t.thisExpression(),
+        t.identifier('props')
+      ),
+      t.identifier('getString')
+    ),
+    [t.stringLiteral(key)])
+);
+
 const Literal = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
   const key = manager.setCache(filename, path.node.value);
@@ -12,7 +28,7 @@ const Literal = ({t, filename}) => path => {
   if(path.parent.type === 'JSXAttribute') {
     path.replaceWith(
         t.jSXExpressionContainer(
-          t.callExpression(t.identifier('getString'), [t.stringLiteral(key)])
+          getStringT(t, key)
         )
     );
     return ;
@@ -23,7 +39,24 @@ const Literal = ({t, filename}) => path => {
     path.parent.type === 'CallExpression' ||
     path.parent.type === 'VariableDeclarator'
   ) {
-    path.replaceWith(t.callExpression(t.identifier('getString'), [t.stringLiteral(key)]));
+    let isInReact = false;
+    // 寻找并判断当前是否在 React 组件内部    
+    path.findParent(parentPath => {
+      if(parentPath.isClassDeclaration() &&
+        parentPath.node.superClass
+      ) {
+        // 此处认为在 Class 内部且有 superClass 即为组件
+        // TODO: 完善此处逻辑
+        isInReact = true;
+      }
+    });
+
+    if(isInReact) {
+      path.replaceWith(propsGetStringT(t, key));
+      return;
+    } 
+
+    path.replaceWith(getStringT(t, key));
     return ;
   }
 }
@@ -31,11 +64,7 @@ const Literal = ({t, filename}) => path => {
 const JSXText = ({t, filename}) => path => {
   if(!utils.hasChinese(path.node.value)) return;
   const key = manager.setCache(filename, path.node.value);
-    path.replaceWith(
-      t.jSXExpressionContainer(
-        t.callExpression(t.identifier('getString'), [t.stringLiteral(key)])
-      )
-  );
+  path.replaceWith(propsGetStringT(t, key));
 };
 
 const Identifier = ({t, filename}) => path => {
