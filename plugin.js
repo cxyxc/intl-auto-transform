@@ -34,31 +34,25 @@ const Literal = ({t, filename}) => path => {
     return ;
   }
 
-  if(
-    path.parent.type === 'ObjectProperty' ||
-    path.parent.type === 'CallExpression' ||
-    path.parent.type === 'VariableDeclarator'
-  ) {
-    let isInReact = false;
-    // 寻找并判断当前是否在 React 组件内部    
-    path.findParent(parentPath => {
-      if(parentPath.isClassDeclaration() &&
-        parentPath.node.superClass
-      ) {
-        // 此处认为在 Class 内部且有 superClass 即为组件
-        // TODO: 完善此处逻辑
-        isInReact = true;
-      }
-    });
+  let isInReact = false;
+  // 寻找并判断当前是否在 React 组件内部    
+  path.findParent(parentPath => {
+    if(parentPath.isClassDeclaration() &&
+      parentPath.node.superClass
+    ) {
+      // 此处认为在 Class 内部且有 superClass 即为组件
+      // TODO: 完善此处逻辑
+      isInReact = true;
+    }
+  });
 
-    if(isInReact) {
-      path.replaceWith(propsGetStringT(t, key));
-      return;
-    } 
+  if(isInReact) {
+    path.replaceWith(propsGetStringT(t, key));
+    return;
+  } 
 
-    path.replaceWith(getStringT(t, key));
-    return ;
-  }
+  path.replaceWith(getStringT(t, key));
+  return ;
 }
 
 const JSXText = ({t, filename}) => path => {
@@ -126,7 +120,7 @@ const AssignmentExpression = ({t, filename}) => path => {
             ...path.node.right.properties,
             t.objectProperty(
               t.identifier('getString'),
-              t.memberExpression(t.identifier('propTypes'), t.identifier('func'))
+              t.memberExpression(t.identifier('PropTypes'), t.identifier('func'))
             )
           ])
         )

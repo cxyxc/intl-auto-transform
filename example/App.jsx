@@ -29,7 +29,10 @@ export class App extends PureComponent {
                                 <Card> <QueryPanel history={props.history}/>
                                     你好啊
                                 </Card>
-                                <Card> <TablePanel history={props.history}/></Card>
+                                <Card> 
+                                {'尚未商城'}
+                                {aaa || '尚未商城'}
+                                <TablePanel history={props.history}/></Card>
                             </div>} />
                         <Route path={routes.add.url()} exact render={props =>
                             <AddPage history={props.history}/>} />

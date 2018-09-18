@@ -10,7 +10,8 @@ function setCache(filename, chinese) {
         if(cache[filename][k] === cleanChinese)
           return k;
     }
-    const key = `${filename.split('.')[0]}.${utils.guid()}`;
+    const keyPrefix = filename.split('.')[0];
+    const key = `${keyPrefix.slice(0, 1).toLocaleLowerCase()}${keyPrefix.slice(1)}.${utils.guid()}`;
     // 缓存汉字
     cache[filename][key] = cleanChinese;
     return key;
