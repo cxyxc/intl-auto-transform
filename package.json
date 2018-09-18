@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "intl-auto": "index.js"
+    "intl-auto": "index.js",
+    "intl-lint": "lint.js"
   },
   "keywords": [],
   "author": "",

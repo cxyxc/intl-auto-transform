@@ -25,24 +25,28 @@ class App extends PureComponent {
                 <Route render={props => <Breadcrumb location={props.location} />} />
                 <div className="page-main">
                     <Switch>
-                        <Route path={routes.query.url()} exact render={props =>
-                            <div>
-                                <Card> <QueryPanel history={props.history}/>
-                                    你好啊
-                                </Card>
-                                <Card> 
-                                {'尚未商城'}
-                                {aaa || '尚未商城'}
-                                <TablePanel history={props.history}/></Card>
-                            </div>} />
-                        <Route path={routes.add.url()} exact render={props =>
-                            <AddPage history={props.history}/>} />
+                        <Route
+                            path={routes.query.url()}
+                            exact
+                            render={props => (
+                                <div>
+                                    <Card>
+                                        {' '}
+                                        <QueryPanel history={props.history} />
+                                        你好啊
+                                    </Card>
+                                    <Card>
+                                        {'尚未商城'}
+                                        {aaa || '尚未商城'}
+                                        <TablePanel history={props.history} />
+                                    </Card>
+                                </div>
+                            )}/>
+                        <Route path={routes.add.url()} exact render={props => <AddPage history={props.history} />} />
 
-                        <Route path={routes.update.url()} exact render={props =>
-                            <UpdatePage history={props.history} id={props.match.params.id}/>} />
+                        <Route path={routes.update.url()} exact render={props => <UpdatePage history={props.history} id={props.match.params.id} />} />
 
-                        <Route path={routes.detail.url()} exact render={props =>
-                            <DetailPage id={props.match.params.id} history={props.history}/>} />
+                        <Route path={routes.detail.url()} exact render={props => <DetailPage id={props.match.params.id} history={props.history} />} />
                         <NoMatchRoute link={routes.query.url()} />
                     </Switch>
                 </div>

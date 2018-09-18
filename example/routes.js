@@ -18,7 +18,7 @@ const routes = new Routes({
         url: '/:id/update',
         title: '更新',
         format: '/{0}/update'
-    },
+    }
 });
 
 export default routes;

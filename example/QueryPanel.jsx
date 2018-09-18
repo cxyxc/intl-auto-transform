@@ -39,11 +39,18 @@ class QueryPanel extends React.PureComponent {
         const hasPermission = option => this.props.permissions.some(item => item === option);
 
         if(hasPermission(PAGE_PERMISSION.add))
-            otherOperations.push(<Button key={PAGE_PERMISSION.export} onClick={this.handleExportClick}>导出</Button>);
+            otherOperations.push(
+                <Button key={PAGE_PERMISSION.export} onClick={this.handleExportClick}>
+                    导出
+                </Button>
+            );
 
         if(hasPermission(PAGE_PERMISSION.add))
-            primaryOperation = <Button key={PAGE_PERMISSION.add} type="primary" onClick={this.handleAddClick}>新增</Button>;
-
+            primaryOperation = (
+                <Button key={PAGE_PERMISSION.add} type="primary" onClick={this.handleAddClick}>
+                    新增
+                </Button>
+            );
 
         const marketOptions = this.props.marketingDepartments.map(d => ({
             value: d.id,
@@ -54,32 +61,30 @@ class QueryPanel extends React.PureComponent {
                 <Row>
                     <Col {...FORM_OPTIONS.col}>
                         <FormItem label="订单编号" {...FORM_OPTIONS.item}>
-                            <TextArea name="codes"
+                            <TextArea
+                                name="codes"
                                 value={this.props.conditions.codes}
                                 placeholder="最多输入1000个，以回车隔开"
-                                onBlur={this.props.onConditionsChange} />
+                                onBlur={this.props.onConditionsChange}/>
                         </FormItem>
                     </Col>
                     <Col {...FORM_OPTIONS.col}>
                         <FormItem label="经销商编号" {...FORM_OPTIONS.item}>
-                            <TextArea name="dealerCodes"
+                            <TextArea
+                                name="dealerCodes"
                                 value={this.props.conditions.dealerCodes}
                                 placeholder="最多输入1000个，以回车隔开"
-                                onBlur={this.props.onConditionsChange} />
+                                onBlur={this.props.onConditionsChange}/>
                         </FormItem>
                     </Col>
                     <Col {...FORM_OPTIONS.col}>
                         <FormItem label="经销商名称" {...FORM_OPTIONS.item}>
-                            <TextInput id="dealerName" value={this.props.conditions.dealerName}
-                                onBlur={this.props.onConditionsChange} />
+                            <TextInput id="dealerName" value={this.props.conditions.dealerName} onBlur={this.props.onConditionsChange} />
                         </FormItem>
                     </Col>
                     <Col {...FORM_OPTIONS.col}>
                         <FormItem label="创建时间" {...FORM_OPTIONS.item}>
-                            <DateRangePicker
-                                id="createTime"
-                                value={this.props.conditions.createTime}
-                                onChange={this.props.onConditionsChange} />
+                            <DateRangePicker id="createTime" value={this.props.conditions.createTime} onChange={this.props.onConditionsChange} />
                         </FormItem>
                     </Col>
                     <Col {...FORM_OPTIONS.col}>
@@ -89,17 +94,17 @@ class QueryPanel extends React.PureComponent {
                                 showSearch
                                 allowClear
                                 optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 value={this.props.conditions.marketIds}
                                 options={marketOptions}
-                                onChange={this.props.onConditionsChange} />
+                                onChange={this.props.onConditionsChange}/>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <FormItem label="状态" {...FORM_ROW_OPTIONS.item}>
-                        <TagSelect name="status"
+                        <TagSelect
+                            name="status"
                             onChange={this.props.onConditionsChange}
                             value={this.props.conditions.status}
                             options={statusOptions}/>
@@ -107,8 +112,12 @@ class QueryPanel extends React.PureComponent {
                 </Row>
                 <Row className="operation-buttons">
                     <Col span={8}>
-                        <Button key="query" type="primary" onClick={this.props.searchList} loading={this.props.loading}>查询</Button>
-                        <Button key="clear" onClick={this.props.onResetClick}>重置</Button>
+                        <Button key="query" type="primary" onClick={this.props.searchList} loading={this.props.loading}>
+                            查询
+                        </Button>
+                        <Button key="clear" onClick={this.props.onResetClick}>
+                            重置
+                        </Button>
                     </Col>
                     <Col span={16} className="col-align-right">
                         <ButtonGroup>{otherOperations}</ButtonGroup>
@@ -130,13 +139,12 @@ QueryPanel.propTypes = {
     onConditionsChange: PropTypes.func.isRequired,
     onResetClick: PropTypes.func.isRequired,
     exportData: PropTypes.func,
-    marketingDepartments: PropTypes.array,
+    marketingDepartments: PropTypes.array
 };
 
 import {connect} from 'react-redux';
 import {saveQueryCondition, searchList, getInitData, resetQueryPanel, exportData} from './actions';
 import selectorFactory from 'Shared/utils/immutableToJsSelectorFactory';
-
 
 const getConditions = selectorFactory(['page', 'appState', 'queryCondition']);
 const getPermissions = selectorFactory(['page', 'domainData', 'initData', 'permissions']);
@@ -154,9 +162,10 @@ const mapDispatchToProps = dispatch => ({
     searchList: () => dispatch(searchList()),
     queryInitData: () => dispatch(getInitData()),
     onResetClick: () => dispatch(resetQueryPanel()),
-    exportData: () => dispatch(exportData()),
-
-    
+    exportData: () => dispatch(exportData())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(QueryPanel);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(QueryPanel);

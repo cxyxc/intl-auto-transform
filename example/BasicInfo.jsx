@@ -10,9 +10,9 @@ import DealerSelectPanel from './DealerSelectPanel';
 const FormItem = Form.Item;
 
 class BasicInfo extends React.PureComponent {
-    state={
+    state = {
         showDealerSelectPanel: false
-    }
+    };
 
     onDealerChange = data => {
         this.props.saveDealer({
@@ -21,24 +21,25 @@ class BasicInfo extends React.PureComponent {
             dealerName: data.name,
             isEC: data.isEC
         });
-    }
+    };
 
-    onSearchDealer = value => this.props.getSimpleDealers(value).then(res => {
-        const data = res.data;
-        if(data)
-            data.forEach(d => {
-                d.id = d.id.toString();
-            });
-        return data;
-    })
+    onSearchDealer = value =>
+        this.props.getSimpleDealers(value).then(res => {
+            const data = res.data;
+            if(data)
+                data.forEach(d => {
+                    d.id = d.id.toString();
+                });
+            return data;
+        });
 
     onCloseDealerSelectPanel = () => {
         this.setState({showDealerSelectPanel: false});
-    }
+    };
 
     onClickSearchDealerBtn = () => {
         this.setState({showDealerSelectPanel: true});
-    }
+    };
 
     render() {
         const validateFundsType = !this.props.data.fundsTypeId && this.props.validate ? {validateStatus: 'error'} : null;
@@ -46,12 +47,14 @@ class BasicInfo extends React.PureComponent {
             value: v.id.toString(),
             text: v.name
         }));
-    
-        const dealerInfo = this.props.data.dealerId ? {
-            id: this.props.data.dealerId,
-            code: this.props.data.dealerCode,
-            name: this.props.data.dealerName
-        } : null;
+
+        const dealerInfo = this.props.data.dealerId
+            ? {
+                id: this.props.data.dealerId,
+                code: this.props.data.dealerCode,
+                name: this.props.data.dealerName
+            }
+            : null;
         return (
             <Form className="form-standard">
                 <Row>
@@ -69,8 +72,11 @@ class BasicInfo extends React.PureComponent {
                 <Row>
                     <Col {...FORM_OPTIONS.col}>
                         <FormItem label="资金类型" {...FORM_OPTIONS.item} required {...validateFundsType}>
-                            <WrappedSelect id="fundsTypeId" options={fundsTypesOptions}
-                                value={this.props.data.fundsTypeId || ''} onChange={this.props.saveData}/>
+                            <WrappedSelect
+                                id="fundsTypeId"
+                                options={fundsTypesOptions}
+                                value={this.props.data.fundsTypeId || ''}
+                                onChange={this.props.saveData}/>
                         </FormItem>
                     </Col>
                     <Col {...FORM_OPTIONS.col}>
@@ -87,7 +93,7 @@ class BasicInfo extends React.PureComponent {
                                 onSearch={this.onSearchDealer}
                                 keyIndex="id"
                                 labelMap={d => `(${d.code}) ${d.name}`}
-                                onClickSearchBtn={this.onClickSearchDealerBtn} />
+                                onClickSearchBtn={this.onClickSearchDealerBtn}/>
                         </FormItem>
                     </Col>
                 </Row>
@@ -96,8 +102,7 @@ class BasicInfo extends React.PureComponent {
                         <TextInput id="remark" value={this.props.data.remark} onBlur={this.props.saveData} />
                     </FormItem>
                 </Row>
-                {
-                    this.state.showDealerSelectPanel &&
+                {this.state.showDealerSelectPanel && (
                     <Modal
                         title="选择经销商"
                         maskClosable={false}
@@ -106,9 +111,9 @@ class BasicInfo extends React.PureComponent {
                         width="70%"
                         visible={this.state.showDealerSelectPanel}
                         onCancel={this.onCloseDealerSelectPanel}>
-                        <DealerSelectPanel onCancel={this.onCloseDealerSelectPanel}/>
+                        <DealerSelectPanel onCancel={this.onCloseDealerSelectPanel} />
                     </Modal>
-                }
+                )}
             </Form>
         );
     }
@@ -122,7 +127,7 @@ BasicInfo.propTypes = {
     disabled: PropTypes.bool,
     fundsTypes: PropTypes.array,
     totalAmount: PropTypes.number,
-    validate: PropTypes.bool,
+    validate: PropTypes.bool
 };
 
 import {connect} from 'react-redux';
@@ -133,12 +138,14 @@ import sum from 'lodash/sum';
 
 const getAddedData = selectorFactory(['page', 'appState', 'savedBasicInfo']);
 const getFundsTypes = selectorFactory(['page', 'domainData', 'initData', 'fundsTypes']);
-const getTotalAmount = createSelector(state => state.getIn(['page', 'appState', 'orderDetails', 'data']), data => {
-    let prices = [];
-    if(data)
-        prices = data.toJS().map(v => v.quantity && v.price ? v.quantity * v.price : 0);
-    return prices.length > 0 ? sum(prices) : 0;
-});
+const getTotalAmount = createSelector(
+    state => state.getIn(['page', 'appState', 'orderDetails', 'data']),
+    data => {
+        let prices = [];
+        if(data) prices = data.toJS().map(v => (v.quantity && v.price ? v.quantity * v.price : 0));
+        return prices.length > 0 ? sum(prices) : 0;
+    }
+);
 
 const mapStateToProps = state => ({
     data: getAddedData(state),
@@ -152,4 +159,7 @@ const mapDispatchToProps = dispatch => ({
     getSimpleDealers: con => dispatch(actions.getSimpleDealers(con))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BasicInfo);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BasicInfo);

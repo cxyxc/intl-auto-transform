@@ -10,6 +10,5 @@ export const PAGE_PERMISSION = Object.freeze({
     // 作废
     abandon: 'abandon',
     // 导出
-    export: 'export',
+    export: 'export'
 });
-

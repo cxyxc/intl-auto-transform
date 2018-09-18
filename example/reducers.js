@@ -8,7 +8,7 @@ const initData = (state, action) => {
     switch(action.type) {
         case actions.GET_INIT_DATA_BEGIN:
             return state.merge({
-                isFetching: true,
+                isFetching: true
             });
         case actions.GET_INIT_DATA_SUCCESS:
             return state.merge({
@@ -17,7 +17,7 @@ const initData = (state, action) => {
                 vehicleSalesOrganization: action.data.vehicleSalesOrganization,
                 branch: action.data.branch,
                 distributionChannel: action.data.distributionChannel,
-                fundsTypes: action.data.fundsTypes,
+                fundsTypes: action.data.fundsTypes
             });
         case actions.GET_INIT_DATA_FAIL:
             return state.merge({
@@ -26,7 +26,7 @@ const initData = (state, action) => {
                 vehicleSalesOrganization: {},
                 branch: {},
                 distributionChannel: {},
-                fundsTypes: [],
+                fundsTypes: []
             });
         case GET_CURRENT_USER_PAGE_PERMISSIONS_SUCCESS:
             return state.merge({
@@ -45,7 +45,7 @@ const list = (state, action) => {
     switch(action.type) {
         case actions.GET_LIST_DATA_BEGIN:
             return state.merge({
-                isFetching: true,
+                isFetching: true
             });
         case actions.GET_LIST_DATA_SUCCESS:
             return state.merge({
@@ -64,7 +64,6 @@ const list = (state, action) => {
     }
 };
 
-
 const queryCondition = (state, action) => {
     switch(action.type) {
         case actions.SAVE_QUERY_CONDITION:
@@ -76,7 +75,7 @@ const queryCondition = (state, action) => {
                 dealerName: '',
                 marketIds: [],
                 status: [],
-                createTime: [],
+                createTime: []
             });
         default:
             return state;
@@ -150,9 +149,8 @@ const orderDetails = (state, action) => {
             if(action.id) {
                 /*eslint-disable eqeqeq */
                 const index = state.get('data').findIndex(s => s.get('id') == action.id);
-                
-                if(index === -1)
-                    return state;
+
+                if(index === -1) return state;
                 return state.deleteIn(['data', index]);
             }
             return state.set('data', Immutable.fromJS([]));
@@ -177,7 +175,7 @@ const orderDetails = (state, action) => {
                 useRebate: d.useRebate,
                 price: d.price,
                 settlementPrice: d.settlementPrice,
-                phoneNumber: d.phoneNumber,
+                phoneNumber: d.phoneNumber
             }));
             return state.set('data', Immutable.fromJS(details));
         }
@@ -185,7 +183,6 @@ const orderDetails = (state, action) => {
             return state;
     }
 };
-
 
 const uiState = (state, action) => {
     switch(action.type) {
@@ -221,5 +218,3 @@ export default combineReducers({
     uiState,
     notification
 });
-
-

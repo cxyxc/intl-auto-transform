@@ -6,7 +6,7 @@ export const InitData = itf({
     payload: itf({
         vehicleSalesOrganization: itf({
             id: 'number',
-            code: 'string',
+            code: 'string'
         }),
         branch: itf({
             id: 'number',
@@ -18,26 +18,27 @@ export const InitData = itf({
             name: 'string',
             code: 'string'
         }),
-        marketingDepartments: [itf({
-            id: 'number',
-            name: 'string',
-        })],
-        fundsTypes: [itf({
-            id: 'number',
-            name: 'string',
-        })],
+        marketingDepartments: [
+            itf({
+                id: 'number',
+                name: 'string'
+            })
+        ],
+        fundsTypes: [
+            itf({
+                id: 'number',
+                name: 'string'
+            })
+        ]
     })
 });
-
 
 const defaultData = {
     id: 'number',
     code: 'string',
     status: 'number',
     rowVersion: 'string?|null',
-    options: [
-        'string'
-    ]
+    options: ['string']
 };
 export const ListData = itf({
     payload: itf({
@@ -49,29 +50,31 @@ export const ListData = itf({
 export const DetailData = itf({
     payload: itf({
         ...defaultData,
-        details: [itf({
-            id: 'number',
-            productId: 'number',
-            productCode: 'string',
-        })]
+        details: [
+            itf({
+                id: 'number',
+                productId: 'number',
+                productCode: 'string'
+            })
+        ]
     })
 });
-
 
 export const VehicleAdditionalResourceData = itf({
     payload: itf({
-        content: [itf({
-            productCategoryCode: 'string',
-            productCategoryName: 'string',
-            productId: 'number',
-            productCode: 'string',
-            productName: 'string',
-            productType: 'string',
-        })],
+        content: [
+            itf({
+                productCategoryCode: 'string',
+                productCategoryName: 'string',
+                productId: 'number',
+                productCode: 'string',
+                productName: 'string',
+                productType: 'string'
+            })
+        ],
         totalElements: 'number'
     })
 });
-
 
 const defaultReceivingAddresse = {
     id: 'number',
@@ -86,35 +89,34 @@ export const ReceivingAddresseData = itf({
     })
 });
 
-
 export const SimpleReceivingAddresseData = itf({
     payload: itf({
         content: [itf(defaultReceivingAddresse)]
     })
 });
 
-
 export const SettlementPriceData = itf({
-    payload: [itf({
-        productCode: 'string',
-        price: 'number'
-    })]
+    payload: [
+        itf({
+            productCode: 'string',
+            price: 'number'
+        })
+    ]
 });
-
 
 export const EditDetailData = itf({
     payload: itf({
         id: 'number',
         code: 'string',
         rowVersion: 'string?|null',
-        options: [
-            'string'
-        ],
-        details: [itf({
-            id: 'number',
-            productId: 'number',
-            productCode: 'string',
-        })]
+        options: ['string'],
+        details: [
+            itf({
+                id: 'number',
+                productId: 'number',
+                productCode: 'string'
+            })
+        ]
     })
 });
 
@@ -124,9 +126,7 @@ const dealerDefault = {
     name: 'string'
 };
 export const DealerSimpleData = itf({
-    payload: [
-        itf(dealerDefault)
-    ]
+    payload: [itf(dealerDefault)]
 });
 
 export const DealerData = itf({

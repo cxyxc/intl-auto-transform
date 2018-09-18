@@ -14,7 +14,7 @@ const state = {
             isFetching: false,
             total: 0,
             data: []
-        },
+        }
     },
     appState: {
         queryCondition: {
@@ -31,12 +31,12 @@ const state = {
         },
         pageTableCondition: {},
         savedBasicInfo: {},
-        orderDetails: {data: []},
+        orderDetails: {data: []}
     },
     uiState: {
         hasWarningForReturn: false
     },
-    notification: {},
+    notification: {}
 };
 
 export default state;
