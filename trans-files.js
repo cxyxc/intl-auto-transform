@@ -27,6 +27,15 @@ fs.recurseSync(currentDir, [
     enCache[key] = JSON.parse(fs.readFileSync(filepath));
 });
 
+const arCache = {};
+fs.recurseSync(currentDir, [
+    'localizations/*.ar.json',
+], (filepath, relative, filename) => {
+    if(!filename) return;
+    const key = filename.split('.')[0];
+    arCache[key] = JSON.parse(fs.readFileSync(filepath));
+});
+
 
 // key 值调整
 for(let filename in manager.cache) {
@@ -65,24 +74,25 @@ fs.recurseSync(currentDir, [
     fs.writeFile(filepath, formatted, err => err);
 });
 
-// 生成 localizations 多语言文件包（中文）
-const localizationKeys = Object.getOwnPropertyNames(manager.getCache());
-const fileContent = {};
-localizationKeys.forEach(key => {
-    Object.assign(fileContent, manager.getCache(key));
-});
-fs.writeFile(path.join(currentDir, 'localizations', 'zh-CN.json'),
-    JSON.stringify(fileContent, null, 4), err => err);
-    
-// 英文
-const localizationKeys = Object.getOwnPropertyNames(enCache);
-const fileContent = {};
-localizationKeys.forEach(key => {
-    Object.assign(fileContent, enCache);
-});
-fs.writeFile(path.join(currentDir, 'localizations', 'en-US.json'),
-    JSON.stringify(fileContent, null, 4), err => err);  
+function generateLocaleFile(cache, locale) {
+    const localizationKeys = Object.getOwnPropertyNames(cache);
+    const fileContent = {};
+    localizationKeys.forEach(key => {
+        Object.assign(fileContent, cache[key]);
+    });
+    fs.writeFile(path.join(currentDir, 'localizations', `${locale}.json`),
+        JSON.stringify(fileContent, null, 4), err => err);       
+}
 
+// 生成 localizations 多语言文件包（中文）
+if(manager.getCache().toString() !== '{}')
+    generateLocaleFile(manager.getCache(), 'zh-CN')
+// 英文
+if(enCache.toString() !== '{}')
+    generateLocaleFile(enCache, 'en-US');
+// 阿拉伯语
+if(arCache.toString() !== '{}')
+    generateLocaleFile(arCache, 'ar');
 
 // 复制 copy 目录的文件到当前节点
 fs.copyFile(path.join(__dirname, './copy/localize.js'), `${currentDir}/localize.js`);
