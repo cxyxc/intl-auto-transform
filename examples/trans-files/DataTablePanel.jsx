@@ -22,59 +22,58 @@ class DataTablePanel extends PureComponent {
     };
 
     render() {
-        const {getString} = this.props;
         const {data, isFetching, message: errorMessage} = this.props.employeeInfo;
         const {pageIndex, pageSize} = this.props.condition;
         const columns = [
             {
-                title: getString('USERNAME'),
+                title: this.props.getString('USERNAME'),
                 dataIndex: 'username',
                 sorter: true,
                 render: (text, record) => <Link to={routes.detail.format(record.userId)}>{text}</Link>
             },
             {
-                title: getString('NAME'),
+                title: this.props.getString('NAME'),
                 dataIndex: 'name',
                 sorter: true
             },
             {
-                title: getString('SEX'),
+                title: this.props.getString('SEX'),
                 dataIndex: 'sex',
                 render: text => conventEnumValueToString(sex, text)
             },
             {
-                title: getString('JOB_DESCRIPTION'),
+                title: this.props.getString('JOB_DESCRIPTION'),
                 dataIndex: 'jobDescription'
             },
             {
-                title: getString('JOB'),
+                title: this.props.getString('JOB'),
                 dataIndex: 'job',
                 render: text => conventEnumValueToString(jobType, text)
             },
             {
-                title: getString('PHONE_NUMBER'),
+                title: this.props.getString('PHONE_NUMBER'),
                 dataIndex: 'phoneNumber'
             },
             {
-                title: getString('ADDRESS'),
+                title: this.props.getString('ADDRESS'),
                 dataIndex: 'address'
             },
             {
-                title: getString('ID_NUMBER'),
+                title: this.props.getString('ID_NUMBER'),
                 dataIndex: 'idNumber'
             },
             {
-                title: getString('DEALER_NAME'),
+                title: this.props.getString('DEALER_NAME'),
                 dataIndex: 'dealerName'
             },
             {
-                title: getString('STATUS'),
+                title: this.props.getString('STATUS'),
                 dataIndex: 'status',
                 render: text => conventEnumValueToString(employeeStatus, text)
             }
         ];
         const fixedColumn = {
-            title: getString('ACTION'),
+            title: this.props.getString('ACTION'),
             dataIndex: 'userId',
             render: (text, record) => {
                 const menus = [
@@ -82,7 +81,7 @@ class DataTablePanel extends PureComponent {
                         id: 'update',
                         children: (
                             <Link key="update" to={routes.update.format(record.userId)}>
-                                {getString('EDIT')}
+                                {this.props.getString('EDIT')}
                             </Link>
                         ),
                         primary: true,
