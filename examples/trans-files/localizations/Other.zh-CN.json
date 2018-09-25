@@ -1,0 +1,14 @@
+{
+    "DEALER_INFORMATION_EDIT_SUCCESS": "成功修改经销商人员信息",
+    "SEX": "性别",
+    "BUSINESS_POST": "业务岗位",
+    "BRANCH": "所属网点",
+    "REQUIRED": "必填",
+    "DEALER_RELATION_EDIT_SUCCESS": "成功修改经销商人员关系",
+    "CLIENT_ERROR": "客户端异常，请联系管理员",
+    "SERVER_ERROR":"服务器异常，请联系管理员",
+    "INDEX": "首页",
+    "EDIT": "编辑",
+    "DETAIL": "详情",
+    "UPDATE_RELATION": "设置人员关系"
+}

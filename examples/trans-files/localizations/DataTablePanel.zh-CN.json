@@ -1,0 +1,14 @@
+{
+    "USERNAME": "工号",
+    "NAME": "姓名",
+    "SEX": "性别",
+    "JOB_DESCRIPTION": "岗位职责描述",
+    "JOB": "业务岗位",
+    "PHONE_NUMBER": "手机号",
+    "ADDRESS": "地址",
+    "ID_NUMBER": "身份证号",
+    "DEALER_NAME": "所属网点",
+    "STATUS": "状态",
+    "ACTION": "操作",
+    "EDIT": "编辑"
+}

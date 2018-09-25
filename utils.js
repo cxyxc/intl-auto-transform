@@ -51,6 +51,14 @@ function toHump(string) {
   return `${string.slice(0, 1).toLocaleLowerCase()}${string.slice(1)}`;
 }
 
+// 下划线转驼峰
+function transformStr(str){
+  const re = /_(\w)/g;
+  return str.toLowerCase().replace(re, function ($0, $1){
+      return $1.toUpperCase();
+  });
+}
+
 module.exports = {
     guid,
     hasChinese,
@@ -58,5 +66,6 @@ module.exports = {
     toHump,
     pathInReact,
     getStringT,
-    propsGetStringT
+    propsGetStringT,
+    transformStr
 };
