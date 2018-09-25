@@ -1,0 +1,18 @@
+{
+  "CUSTOMER_NAME":"اسم العميل",
+  "CELLNUMBER":"رقم الهاتف الجوال",
+  "CUSTOMER_TYPE":"نوع العميل",
+  "SEX":"الجنسين",
+  "CREDENTIAL_TYPE":"نوع الشهادة",
+  "CREDENTIAL_NUMBER":"رقم الشهادة",
+  "REGION":"المنطقة الحضرية",
+  "PRODUCT":"المنتجات",
+  "PAYMETHOD":"طريقه الدفع",
+  "PRICE":"سعر وحده السيارة",
+  "SUBMIT_SUCCESS":"قدمت بنجاح",
+  "ROUTE_LIST": "قائمة",
+  "ROUTE_ADD": "جديد",
+  "ROUTE_DETAIL": "التفاصيل",
+  "ROUTE_UPDATE": "تغيير",
+  "ROUTE_MATCH_CAR": "مع السيارات"
+}

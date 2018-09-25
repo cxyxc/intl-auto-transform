@@ -1,0 +1,15 @@
+{
+    
+    "CODE": "编号",
+    "NAME": "名称",
+    "CATEGORY": "分类",
+    "TYPE": "类型",
+    "ISFREE": "是否赠送",
+    "QUANTITY": "数量",
+    "AMOUNT": "单价",
+    "DISCOUNTPRICE": "优惠后金额",
+    "TOTAL_AMOUNT": "总金额",
+    "YES": "是",
+    "NO": "否",
+    "VALUE_ADDED": "增值业务"
+}

@@ -1,0 +1,18 @@
+{
+    "CUSTOMER_NAME": "客户姓名",
+    "CELLNUMBER": "手机号码",
+    "CUSTOMER_TYPE": "客户类型",
+    "SEX": "性别",
+    "CREDENTIAL_TYPE": "证件类型",
+    "CREDENTIAL_NUMBER": "证件号码",
+    "REGION": "省市区",
+    "PRODUCT": "产品",
+    "PAYMETHOD": "付款方式",
+    "PRICE": "车辆单价",
+    "SUBMIT_SUCCESS": "提交成功",
+    "ROUTE_LIST": "列表",
+    "ROUTE_ADD": "新增",
+    "ROUTE_DETAIL": "详情",
+    "ROUTE_UPDATE": "更新",
+    "ROUTE_MATCH_CAR": "配车"
+}

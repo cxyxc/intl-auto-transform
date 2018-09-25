@@ -1,0 +1,14 @@
+{
+    "NOTIFACATION_MESSAGE": "请选择车辆",
+    "VEHICLE_INFO": "车辆信息",
+    "SUBMIT": "提交",
+    "VIN_TOOLTIP": "点击标签，弹出查询车辆面板",
+    "VIN_PLACEHOLDER": "输入VIN快速搜索",
+    "MODAL_TITLE": "查询车辆库存",
+    "PRODUCT_CODE": "产品编号",
+    "PRODUCT_NAME": "产品名称",
+    "VEHICLEMODEL_NAME": "车型",
+    "COLOR": "颜色",
+    "PRICE": "车辆单价",
+    "CERTIFICATE_NUMBER": "合格证号"
+}

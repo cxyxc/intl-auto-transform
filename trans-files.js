@@ -11,12 +11,22 @@ const format = require("prettier-eslint");
 const currentDir = process.cwd();
 
 fs.recurseSync(currentDir, [
-    'localizations/*.json',
+    'localizations/*.zh-CN.json',
 ], (filepath, relative, filename) => {
     if(!filename) return;
     const key = filename.split('.')[0];
     manager.cache[key] = JSON.parse(fs.readFileSync(filepath));
 });
+
+const enCache = {};
+fs.recurseSync(currentDir, [
+    'localizations/*.en-US.json',
+], (filepath, relative, filename) => {
+    if(!filename) return;
+    const key = filename.split('.')[0];
+    enCache[key] = JSON.parse(fs.readFileSync(filepath));
+});
+
 
 // key 值调整
 for(let filename in manager.cache) {
@@ -63,3 +73,16 @@ localizationKeys.forEach(key => {
 });
 fs.writeFile(path.join(currentDir, 'localizations', 'zh-CN.json'),
     JSON.stringify(fileContent, null, 4), err => err);
+    
+// 英文
+const localizationKeys = Object.getOwnPropertyNames(enCache);
+const fileContent = {};
+localizationKeys.forEach(key => {
+    Object.assign(fileContent, enCache);
+});
+fs.writeFile(path.join(currentDir, 'localizations', 'en-US.json'),
+    JSON.stringify(fileContent, null, 4), err => err);  
+
+
+// 复制 copy 目录的文件到当前节点
+fs.copyFile(path.join(__dirname, './copy/localize.js'), `${currentDir}/localize.js`);

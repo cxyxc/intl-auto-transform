@@ -1,0 +1,18 @@
+{
+    "CUSTOMER_INFO": "客户信息",
+    "CUSTOMER_NAME": "客户姓名",
+    "CELLNUMBER": "手机号码",
+    "SEX": "客户性别",
+    "CUSTOMER_TYPE": "客户类型",
+    "CREDENTIAL_TYPE": "证件类型",
+    "CREDENTIAL_NUMBER": "证件号码",
+    "CONSULTANT_NAME": "销售顾问",
+    "PAYMETHOD": "付款方式",
+    "LOANCHANNEL": "贷款渠道",
+    "WECHAT": "微信号",
+    "DRIVER_NAME": "使用人",
+    "DRIVER_PHONENUMBER": "使用人电话",
+    "REGION": "区省市县",
+    "DETAIL_ADDRESS": "详细地址",
+    "ADVANCEDEPOSIT": "下定订金"
+}

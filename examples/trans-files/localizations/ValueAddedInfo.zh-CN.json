@@ -1,0 +1,14 @@
+{
+    "CODE": "编号",
+    "NAME": "名称",
+    "CATEGORY": "分类",
+    "AMOUNT": "单价",
+    "ISFREE": "是否赠送",
+    "QUANTITY": "数量",
+    "DISCOUNTPRICE": "优惠后金额",
+    "TOTAL_AMOUNT": "总金额",
+    "YES": "是",
+    "NO": "否",
+    "ALTER_MESSAGE_1": "点击",
+    "ALTER_MESSAGE_2": "图标，移除已经选择的增值业务"
+}

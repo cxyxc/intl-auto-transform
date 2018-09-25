@@ -1,0 +1,18 @@
+{
+  "CUSTOMER_NAME":"Customer Name",
+  "CELLNUMBER":"Mobile phone number",
+  "CUSTOMER_TYPE":"Customer Type",
+  "SEX":"Gender",
+  "CREDENTIAL_TYPE":"Certificate type",
+  "CREDENTIAL_NUMBER":"Certificate number",
+  "REGION":"Province urban Area",
+  "PRODUCT":"Products",
+  "PAYMETHOD":"Payment method",
+  "PRICE":"Vehicle Unit Price",
+  "SUBMIT_SUCCESS":"Submitted successfully",
+  "ROUTE_LIST": "list",
+  "ROUTE_ADD": "add",
+  "ROUTE_DETAIL": "detail",
+  "ROUTE_UPDATE": "update",
+  "ROUTE_MATCH_CAR": "matchCar"
+}

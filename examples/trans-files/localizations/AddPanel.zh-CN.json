@@ -1,0 +1,14 @@
+{
+    "ALERT_MESSAGE": "双击选择增值业务",
+    "VALIDATE_MESSAGE_1": "不能为空",
+    "VALIDATE_MESSAGE_2": "增值服务",
+    "VALIDATE_MESSAGE_3": "数量必填",
+    "STEP_1_TITLE": "填写零售合同信息",
+    "SETP_1_CONTENT": "跳过 增值服务",
+    "NEXT_SETP": "下一步",
+    "PERV_SETP": "上一步",
+    "SETP_2_TITLE": "选择增值业务",
+    "SETP_2_CONTENT": "增值业务",
+    "SETP_3_TITLE": "确认零售合同信息",
+    "SUBMIT": "提交"
+}

@@ -1,20 +1,104 @@
-:local(.card_margin) {
-    margin-bottom: 16px;
+:local(.white-space-nowrap) {
+    white-space: nowrap
 }
 
-:local(.optionBtn) {
-    text-align: right;
+:local(.stepsContent0) {
+    width: 90%;
+    margin: 0 auto;
+  }
+    
+  :local(.stepsContent1) {
+    width: 80%;
+    margin: 0 auto;
+  }
+  :local(.stepsAction){
+      margin-top: 24px;
+  }
+  
+  :local(.stepsHeader){
+    width: 80% !important;
+    padding-top: 10px !important;
+    padding-bottom: 15px !important;
+    margin: 0 auto !important;
+  }
+  
+  :local(.nullWarning){
+      color: red
+  }
+  
+  :local(.cardWidth){
+    width: 70%;
+  }
+  
+  :local(.image)  {
+    width: 148px;
+    height: 148px;
+  }
+  :local(.imageUploader) {
+    display: block;
+    border: 1px dashed #161616;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 150px;
+    height: 150px;
+  }
+  :local(.imageUploaderTrigger) {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 28px;
+    color: #999;
+    width: 150px;
+    height: 150px;
+  }
+  :local(.datePickerWidth){
+    width: 100% !important;
+  }
+  
+  :local(.rangePicker) {
+    width: 100% !important;
+  }
+  
+  :local(.cursorStyle){
+    cursor: pointer;
+  }
+
+  .editable-row-operations a {
+    margin-right: 8px;
+  }
+
+  :local(.morePanel){
+    margin-top: 16px;
 }
 
-:local(.right) {
-    float: right;
+.fontColor .antd-pro-description-list-term{
+  color: red !important;
 }
 
-:local(.btnMargin) {
-    margin-left: 8px;
+:local(.fixBtn) {
+  margin-top: 16px;
+  text-align: right;
 }
 
-:local .avatar {
-    max-width: 102px;
-    max-height: 102px;
+:local(.condition-width) {
+  max-width: 80%;
+}
+
+:local(.tablePanel){
+  padding-top: 10px;
+}
+
+:local(.modalPanel){
+  width: 70%
+}
+
+:local(.marginRight) {
+  margin-right: 8px;
+}
+
+:local(.rtl-text-left) {
+  text-align: left
+}
+
+.ant-row :local(.float-none) {
+  float: none
 }

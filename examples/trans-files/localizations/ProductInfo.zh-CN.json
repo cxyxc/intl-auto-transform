@@ -1,0 +1,15 @@
+{
+    "PRODUCT_ALERT_MESSAGE": "双击选择产品",
+    "VEHICLE_ALERT_MESSAGE": "双击选择车辆",
+    "VEHICLE_INFO": "车辆信息",
+    "PRODUCT_TOOLTIP": "点击标签，弹出查询产品面板",
+    "PRODUCT": "产品",
+    "PRODUCT_PLACEHOLDER": "输入编号、名称快速搜索，或者点击“产品”标签查询更多数据",
+    "VIN_TOOLTIP": "点击标签，弹出查询车辆面板",
+    "VIN_PLACEHOLDER": "输入VIN快速搜索，或者点击“VIN”标签查询更多数据",
+    "PRICE": "车辆单价",
+    "CERTIFICATE_NUMBER": "合格证号",
+    "QUERY_PRODUCT": "查询产品",
+    "BELONG_PRODUCT": "所属产品",
+    "VEHICLE_STOCK": "查询车辆库存"
+}

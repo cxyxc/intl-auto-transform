@@ -1,72 +1,89 @@
 import {PAGE} from '../constants';
-const emptyGuid = '00000000-0000-0000-0000-000000000000';
-import {employeeStatus} from '../Enum';
 const state = {
     domainData: {
-        // 页面权限
-        permissions: {
+        initData: {
             isFetching: false,
+            errorCode: '',
             message: '',
-            data: []
+            currentUserInfo: {},
+            consultants: [],
+            permissions: []
         },
-        employees: {
+        // 指定零售合同的详情信息
+        retailContractDetail: {
             isFetching: false,
+            errorCode: '',
             message: '',
             data: {}
         },
-        employeeDetail: {
+        // 查询界面的列表数据
+        retailContracts: {
             isFetching: false,
+            errorCode: '',
             message: '',
-            data: {}
-        },
-        dealers: {
-            isFetching: false,
-            message: '',
+            total: 0,
             data: []
         },
-        employeeAndRelation: {
+        // 指定零售单包括的增值业务服务集合
+        valueAddeds: {
             isFetching: false,
+            errorCode: '',
             message: '',
-            data: {
-                employees: [],
-                relations: []
-            }
+            total: 0,
+            data: []
         },
-        submitEditInfo: {
+        // 指定零售单的操作日志集合
+        retailContractLogs: {
             isFetching: false,
-            message: ''
+            errorCode: '',
+            message: '',
+            total: 0,
+            data: []
         },
-        submitEditRelationInfo: {
+        // 界面上搜索到的产品集合
+        products: {
             isFetching: false,
-            message: ''
-        }
+            total: 0,
+            data: []
+        },
+        // 界面上搜索到的车辆库存集合
+        vehicleInventorys: {
+            isFetching: false,
+            total: 0,
+            data: []
+        },
+        // 界面上搜索到的商品
+        valueAddedProducts: {
+            isFetching: false,
+            total: 0,
+            data: []
+        },
     },
     appState: {
-        queryCondition: {},
-        // 编辑人员信息
-        editInfo: {},
-        // 人员关系
-        relations: []
-    },
-    uiState: {
-        queryPanel: {
-            username: '',
-            name: '',
-            job: [],
-            status: employeeStatus.有效,
-            phoneNumber: '',
+        // 查询面板的条件
+        queryCondition: {
+            customerName: '',
+            cellNumber: '',
+            status: [],
+            consultants: [],
+            payStatus: [],
+            vin: '',
             createTime: [],
             pageIndex: PAGE.index,
             pageSize: PAGE.size,
-            sortField: undefined,
-            isDesc: undefined
+            sortBy: '',
+            sortOrder: 'descend',
         },
-        droggableTree: {
-            expandedKeys: [emptyGuid],
-            selectedKeys: [],
-            autoExpandParent: true
-        }
+        // 查询界面的分页条件
+        pageQueryCondition: {},
+        // 新增，修改，配车操作保存的界面数据
+        customerInfo: {},
+        productInfo: {},
+        selectedValueAddedIds: [],
+        // 分步显示的当前步骤
+        currentStep: 0,
     },
     notification: {}
 };
+
 export default state;

@@ -1,321 +1,364 @@
 import {combineReducers} from 'redux-immutable';
 import Immutable from 'immutable';
 import * as actions from './actions';
-import * as userContextActions from 'Shared/actions/currentUserContext';
-import {ERROR_CODE} from '../constants';
-import initState from './state';
-import {getString} from './localize'; // 获取指定id的所有子孙元素
+import difference from 'lodash/difference';
+import {GET_CURRENT_USER_PAGE_PERMISSIONS_SUCCESS, GET_CURRENT_USER_PAGE_PERMISSIONS_FAIL} from 'Shared/actions/currentUserContext';
+import {jobType} from '../Enum';
 
-const getAllChild = (arr, id) => {
-    let tmpArr = [];
-    arr.forEach(a => {
-        if(a.parentId === id) {
-            tmpArr.push(a);
-            const tmp = getAllChild(arr, a.userId);
-            tmpArr = tmpArr.concat(tmp);
+const initData = (state, action) => {
+    switch(action.type) {
+        case actions.GET_INIT_DATA_BEGIN:
+            return state.merge({
+                isFetching: true,
+                consultants: [],
+                currentUserInfo: {}
+            });
+        case actions.GET_INIT_DATA_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                consultants: action.data.consultants,
+                currentUserInfo: action.data.currentUserInfo
+            });
+        case actions.GET_INIT_DATA_FAIL:
+            return state.merge({
+                isFetching: false,
+                consultants: [],
+                currentUserInfo: {}
+            });
+        case GET_CURRENT_USER_PAGE_PERMISSIONS_SUCCESS:
+            return state.merge({
+                permissions: action.data
+            });
+        case GET_CURRENT_USER_PAGE_PERMISSIONS_FAIL:
+            return state.merge({
+                permissions: []
+            });
+        default:
+            return state;
+    }
+};
+
+const retailContracts = (state, action) => {
+    switch(action.type) {
+        case actions.GET_LIST_DATA_BEGIN:
+            return state.merge({
+                isFetching: true,
+                total: 0,
+                data: []
+            });
+        case actions.GET_LIST_DATA_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                total: action.data.totalElements,
+                data: action.data.content
+            });
+        case actions.GET_LIST_DATA_FAIL:
+            return state.merge({
+                isFetching: false,
+                total: 0,
+                data: []
+            });
+        default:
+            return state;
+    }
+};
+
+const retailContractDetail = (state, action) => {
+    switch(action.type) {
+        case actions.GET_DETAIL_BEGIN:
+            return state.merge({
+                isFetching: true,
+                data: {}
+            });
+        case actions.GET_DETAIL_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                data: action.data
+            });
+        case actions.GET_DETAIL_FAIL:
+            return state.merge({
+                isFetching: false,
+                data: {}
+            });
+        default:
+            return state;
+    }
+};
+
+const valueAddeds = (state, action) => {
+    switch(action.type) {
+        case actions.GET_VALUE_ADDEDS_BEGIN:
+            return state.merge({
+                isFetching: true,
+                total: 0,
+                data: []
+            });
+        case actions.GET_VALUE_ADDEDS_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                data: action.data
+            });
+        case actions.GET_VALUE_ADDEDS_FAIL:
+            return state.merge({
+                isFetching: false,
+                total: 0,
+                data: []
+            });
+        default:
+            return state;
+    }
+};
+
+const retailContractLogs = (state, action) => {
+    switch(action.type) {
+        case actions.GET_LOGS_BEGIN:
+            return state.merge({
+                isFetching: true,
+                total: 0,
+                data: []
+            });
+        case actions.GET_LOGS_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                data: action.data
+            });
+        case actions.GET_LOGS_FAIL:
+            return state.merge({
+                isFetching: false,
+                total: 0,
+                data: []
+            });
+        default:
+            return state;
+    }
+};
+
+const products = (state, action) => {
+    switch(action.type) {
+        case actions.GET_PRODUCTS_BEGIN:
+            return state.merge({
+                isFetching: true,
+                total: 0,
+                data: []
+            });
+        case actions.GET_PRODUCTS_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                total: action.totalElements,
+                data: action.data
+            });
+        case actions.GET_PRODUCTS_FAIL:
+            return state.merge({
+                isFetching: false,
+                total: 0,
+                data: []
+            });
+        default:
+            return state;
+    }
+};
+
+const vehicleInventorys = (state, action) => {
+    switch(action.type) {
+        case actions.GET_VEHICLES_BEGIN:
+            return state.merge({
+                isFetching: true,
+                total: 0,
+                data: []
+            });
+        case actions.GET_VEHICLES_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                total: action.totalElements,
+                data: action.data
+            });
+        case actions.SELECT_PRODUCT:
+        case actions.SELECT_VEHICLE:
+        case actions.CLEAR_VEHICLE:
+        case actions.GET_VEHICLES_FAIL:
+            return state.merge({
+                isFetching: false,
+                total: 0,
+                data: []
+            });
+        default:
+            return state;
+    }
+};
+
+const valueAddedProducts = (state, action) => {
+    switch(action.type) {
+        case actions.SEARCH_VALUE_ADDED_BEGIN:
+            return state.merge({
+                isFetching: true,
+                total: 0,
+                data: []
+            });
+        case actions.SEARCH_VALUE_ADDED_SUCCESS:
+            return state.merge({
+                isFetching: false,
+                total: action.totalElements,
+                data: action.data
+            });
+        case actions.RESET_ADD_DATA:
+        case actions.SEARCH_VALUE_ADDED_FAIL:
+            return state.merge({
+                isFetching: false,
+                total: 0,
+                data: []
+            });
+        default:
+            return state;
+    }
+};
+
+const appState = (state, action) => {
+    switch(action.type) {
+        case actions.SAVE_QUERY_CONDITION:
+            return state.updateIn(['queryCondition'], obj => obj.merge(action.obj));
+        case actions.RESET_QUERY_PANEL:
+            return state.updateIn(['queryCondition'], obj => obj.merge({
+                customerName: '',
+                cellNumber: '',
+                status: [],
+                consultants: [],
+                payStatus: [],
+                vin: '',
+                createTime: [],
+            }));
+        case actions.GET_LIST_DATA_SUCCESS:
+            return state.updateIn(['pageQueryCondition'], con => con.merge(action.condition));
+        case actions.NEXT_STEP:
+            return state.updateIn(['currentStep'], currentStep => currentStep + 1);
+        case actions.PREV_STEP:
+            return state.updateIn(['currentStep'], currentStep => currentStep > 0 ? currentStep - 1 : 0);
+        case actions.LAST_STEP:
+            return state.updateIn(['currentStep'], currentStep => currentStep + 2);
+        case actions.GET_INIT_DATA_SUCCESS: {
+            if(action.data.currentUserInfo && (action.data.currentUserInfo.job === jobType.销售顾问 ||
+                     action.data.currentUserInfo.job === jobType.销售经理))
+                return state.updateIn(['customerInfo'], obj => obj.merge({
+                    consultantId: action.data.currentUserInfo.userId
+                }));
+            return state;
         }
-    });
-    return tmpArr;
-};
-
-const permissions = (state, action) => {
-    switch(action.type) {
-        case userContextActions.GET_CURRENT_USER_PAGE_PERMISSIONS_BEGIN:
-            return state.set('isFetching', true);
-
-        case userContextActions.GET_CURRENT_USER_PAGE_PERMISSIONS_SUCCESS:
-            return state.merge({
-                isFetching: false,
-                data: action.data
-            });
-
-        case userContextActions.GET_CURRENT_USER_PAGE_PERMISSIONS_FAIL:
-            return state.merge({
-                isFetching: false,
-                message: action.message
-            });
-
-        default:
+        case actions.SELECT_PRODUCT:
+            return state.updateIn(['productInfo'], obj => obj.merge({
+                productId: action.data.productId,
+                productCode: action.data.productCode,
+                productName: action.data.productName,
+                vehicleModelName: action.data.vehicleModelName,
+                color: action.data.color,
+                vin: ''
+            }));
+        case actions.SELECT_VEHICLE: {
+            if(action.data.productId)
+                return state.updateIn(['productInfo'], obj => obj.merge({
+                    productId: action.data.productId,
+                    productCode: action.data.productCode,
+                    productName: action.data.productName,
+                    vehicleModelName: action.data.vehicleModelName,
+                    color: action.data.color,
+                    vin: action.data.vin
+                }));
+            return state.updateIn(['productInfo'], obj => obj.merge({
+                vin: action.data.vin
+            }));
+        }
+        case actions.SAVE_ADD_DATA:
+            return state.updateIn([action.contentType], obj => obj.merge(action.obj));
+        case actions.SAVE_SELECTED_VALUEADDED: {
+            const index = state.get('selectedValueAddedIds').findIndex(s => s.get('id') === action.data.id);
+            if(index === -1)
+                return state.updateIn(['selectedValueAddedIds'], list => list.push(Immutable.fromJS({
+                    id: action.data.id,
+                    code: action.data.code,
+                    name: action.data.name,
+                    category: action.data.category,
+                    type: action.data.type,
+                    amount: action.data.amount,
+                    quantity: 1,
+                    totalAmount: action.data.amount
+                })));
             return state;
-    }
-};
-
-const employees = (state, action) => {
-    switch(action.type) {
-        case actions.GET_EMPLOYEES_BEGIN:
-            return state.set('isFetching', true);
-
-        case actions.GET_EMPLOYEES_SUCCESS:
-            return state.merge({
-                isFetching: false,
-                data: action.data
-            });
-
-        case actions.GET_EMPLOYEES_FAIL:
-            return state.merge({
-                isFetching: false,
-                message: action.message
-            });
-
-        default:
-            return state;
-    }
-};
-
-const employeeDetail = (state, action) => {
-    switch(action.type) {
-        case actions.GET_EMPLOYEE_DETAIL_BEGIN:
-            return state.set('isFetching', true);
-
-        case actions.GET_EMPLOYEE_DETAIL_SUCCESS:
-            return state.merge({
-                isFetching: false,
-                data: action.data
-            });
-
-        case actions.GET_EMPLOYEE_DETAIL_FAIL:
-            return state.merge({
-                isFetching: false,
-                message: action.message
-            });
-
-        case actions.CLOSE_DETAIL_PANEL:
-            return Immutable.fromJS(initState.domainData.employeeDetail);
-
-        default:
-            return state;
-    }
-};
-
-const dealers = (state, action) => {
-    switch(action.type) {
-        case actions.GET_DEALERS_BEGIN:
-            return state.set('isFetching', true);
-
-        case actions.GET_DEALERS_SUCCESS:
-            return state.merge({
-                isFetching: false,
-                data: action.data
-            });
-
-        case actions.GET_DEALERS_FAIL:
-            return state.merge({
-                isFetching: false,
-                message: action.message
-            });
-
-        default:
-            return state;
-    }
-};
-
-const employeeAndRelation = (state, action) => {
-    switch(action.type) {
-        case actions.GET_ALL_EMPLOYEES_BEGIN:
-            return state.set('isFetching', true);
-
-        case actions.GET_ALL_EMPLOYEES_SUCCESS:
-            return state.merge({
-                isFetching: false,
-                data: action.data
-            });
-
-        case actions.GET_ALL_EMPLOYEES_FAIL:
-            return state.merge({
-                isFetching: false,
-                message: action.message
-            });
-
-        case actions.CLOSE_EDIT_RELATION_PANEL:
-            return Immutable.fromJS(initState.domainData.employeeAndRelation);
-
-        default:
-            return state;
-    }
-};
-
-const submitEditInfo = (state, action) => {
-    switch(action.type) {
-        case actions.UPDATE_EMPLOYEE_BEGIN:
-            return state.set('isFetching', true);
-
-        case actions.UPDATE_EMPLOYEE_SUCCESS:
-            return state.set('isFetching', false);
-
-        case actions.UPDATE_EMPLOYEE_FAIL:
-            return state.merge({
-                isFetching: false,
-                message: action.message
-            });
-
-        case actions.CLOSE_EDIT_PANEL:
-            return Immutable.fromJS(initState.domainData.submitEditInfo);
-
-        default:
-            return state;
-    }
-};
-
-const submitEditRelationInfo = (state, action) => {
-    switch(action.type) {
-        case actions.SUBMIT_RELATION_INFO_BEGIN:
-            return state.set('isFetching', true);
-
-        case actions.SUBMIT_RELATION_INFO_SUCCESS:
-            return state.set('isFetching', false);
-
-        case actions.SUBMIT_RELATION_INFO_FAIL:
-            return state.merge({
-                isFetching: false,
-                message: action.message
-            });
-
-        case actions.CLOSE_EDIT_RELATION_PANEL:
-            return Immutable.fromJS(initState.domainData.submitEditRelationInfo);
-
+        }
+        case actions.ROMOVE_VALUEADDED: {
+            if(action.id) {
+                const index = state.get('selectedValueAddedIds').findIndex(s => s.get('id') === action.id);
+                if(index === -1)
+                    return state;
+                return state.deleteIn(['selectedValueAddedIds', index]);
+            }
+            return state.set('selectedValueAddedIds', Immutable.fromJS([]));
+        }
+        case actions.UPDATE_VALUEADDED: {
+            const index = state.get('selectedValueAddedIds').findIndex(v => v.get('id') === action.obj.id);
+            return state.updateIn(['selectedValueAddedIds', index], obj => obj.merge(action.obj));
+        }
+        case actions.GET_DETAIL_SUCCESS: {
+            const {regionId, provinceId, cityId, districtId, ...other} = action.data;
+            const regions = [];
+            if(regionId)
+                regions.push(regionId);
+            if(provinceId)
+                regions.push(provinceId);
+            if(cityId)
+                regions.push(cityId);
+            if(districtId)
+                regions.push(districtId);
+            other.regionId = regions;
+            return state.withMutations(map => map.updateIn(['customerInfo'], obj => obj.merge(other)).
+                updateIn(['productInfo'], obj => obj.merge({
+                    productId: action.data.productId,
+                    productCode: action.data.productCode,
+                    productName: action.data.productName,
+                    vehicleModelName: action.data.vehicleModelName,
+                    color: action.data.color,
+                    vin: action.data.vin,
+                    price: action.data.price,
+                    certificateNumber: action.data.certificateNumber,
+                })));
+        }
+        case actions.GET_VALUE_ADDEDS_SUCCESS: {
+            const data = action.data.map(d => ({
+                id: d.productId,
+                code: d.productCode,
+                name: d.productName,
+                category: d.type,
+                isFree: d.isFree,
+                quantity: d.quantity,
+                discountPrice: d.discountPrice ? d.discountPrice : undefined,
+                totalAmount: d.totalAmount,
+                amount: d.unitPrice
+            }));
+            return state.updateIn(['selectedValueAddedIds'], list => list.size > 0 ? list : Immutable.fromJS(data));
+        }
+        case actions.RESET_ADD_DATA: {
+            return state.withMutations(map => map.set('productInfo', Immutable.fromJS({}))
+                .set('customerInfo', Immutable.fromJS({}))
+                .set('currentStep', 0)
+                .set('selectedValueAddedIds', Immutable.List()));
+        }
         default:
             return state;
     }
 };
 
 const domainData = combineReducers({
-    permissions,
-    employees,
-    employeeDetail,
-    dealers,
-    employeeAndRelation,
-    submitEditInfo,
-    submitEditRelationInfo
+    initData,
+    retailContractDetail,
+    retailContracts,
+    valueAddeds,
+    retailContractLogs,
+    products,
+    vehicleInventorys,
+    valueAddedProducts
 });
 
-const queryCondition = (state, action) => {
-    switch(action.type) {
-        case actions.GET_EMPLOYEES_SUCCESS:
-            return state.merge(action.condition);
-
-        default:
-            return state;
-    }
-};
-
-const editInfo = (state, action) => {
-    switch(action.type) {
-        case actions.GET_EMPLOYEE_DETAIL_SUCCESS: {
-            const data = action.data;
-            return state.merge(data);
-        }
-
-        case actions.MODIFY_EDIT_INFO:
-            return state.set(action.name, action.value);
-
-        case actions.CLOSE_EDIT_PANEL:
-            return Immutable.fromJS(initState.appState.editInfo);
-
-        default:
-            return state;
-    }
-};
-
-const relations = (state, action) => {
-    switch(action.type) {
-        case actions.GET_ALL_EMPLOYEES_SUCCESS:
-            return Immutable.fromJS(action.data.relations);
-
-        case actions.ADD_RELATION: {
-            return state.push(
-                Immutable.fromJS({
-                    userId: action.userId,
-                    parentId: action.parentId
-                })
-            );
-        }
-
-        case actions.DELETE_RELATION: {
-            const childIds = getAllChild(state.toJS(), action.userId).map(d => d.userId);
-            childIds.push(action.userId);
-            return state.filterNot(d => childIds.some(c => c === d.get('userId')));
-        }
-
-        case actions.CLOSE_EDIT_RELATION_PANEL:
-            return Immutable.fromJS(initState.appState.relations);
-
-        default:
-            return state;
-    }
-};
-
-const appState = combineReducers({
-    queryCondition,
-    editInfo,
-    relations
-});
-
-const queryPanel = (state, action) => {
-    switch(action.type) {
-        case actions.MODIFY_QUERY_CONDITION:
-            return state.set(action.name, Immutable.fromJS(action.value));
-
-        case actions.REST_QUERY_CONDITION:
-            return Immutable.fromJS(initState.uiState.queryPanel);
-
-        case actions.GET_EMPLOYEES_SUCCESS:
-            return state
-                .set('pageSize', action.condition.pageSize)
-                .set('sortField', action.condition.sortField)
-                .set('isDesc', action.condition.isDesc);
-
-        default:
-            return state;
-    }
-};
-
-const droggableTree = (state, action) => {
-    switch(action.type) {
-        case actions.MODIFY_DRAG_TREE_STATE:
-            return state.merge(action.data);
-
-        case actions.ADD_RELATION: {
-            const expandedKeys = state.get('expandedKeys').toJS();
-            expandedKeys.push(action.parentId);
-            return state.merge({
-                expandedKeys,
-                selectedKeys: [action.userId],
-                autoExpandParent: true
-            });
-        }
-
-        case actions.CLOSE_EDIT_RELATION_PANEL:
-            return Immutable.fromJS(initState.uiState.droggableTree);
-
-        default:
-            return state;
-    }
-};
-
-const uiState = combineReducers({
-    queryPanel,
-    droggableTree
-});
-
-const notification = (state, action) => {
-    if(action.notificationType) {
-        let message = '';
-        if(action.message) message = action.message;
-        else if(action.statusCode === ERROR_CODE) message = getString('CLIENT_ERROR');
-        else message = getString('SERVER_ERROR');
-        return state.merge({
-            timeStamp: action.timeStamp,
-            type: action.notificationType,
-            message
-        });
-    }
-
-    return state;
-};
+import {createNotificationReducer as notification} from 'Shared/utils/serverNotification';
 
 export default combineReducers({
     domainData,
     appState,
-    uiState,
     notification
 });

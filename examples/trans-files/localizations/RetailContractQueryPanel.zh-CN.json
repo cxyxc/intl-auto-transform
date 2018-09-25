@@ -1,0 +1,12 @@
+{
+    "ADD": "新增",
+    "CUSTOMER_NAME": "客户姓名",
+    "CELLNUMBER": "手机号码",
+    "VIN": "VIN",
+    "CREATE_TIME": "创建时间",
+    "CONSULTANT_NAME": "销售顾问",
+    "STATUS": "状态",
+    "PAY_STATUS": "付款状态",
+    "QUERY": "查询",
+    "RESET": "重置"
+}
