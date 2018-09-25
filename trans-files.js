@@ -42,7 +42,11 @@ for(let filename in manager.cache) {
     for(let key in manager.cache[filename]) {
         const newKey = `${utils.toHump(filename)}.${utils.transformStr(key)}`;
         manager.cache[filename][newKey] = manager.cache[filename][key];
+        enCache[filename][newKey] = enCache[filename][key];
+        arCache[filename][newKey] = arCache[filename][key];
         delete manager.cache[filename][key];
+        delete enCache[filename][key];
+        delete arCache[filename][key];
     }
 }
 
