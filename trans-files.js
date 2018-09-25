@@ -27,14 +27,14 @@ fs.recurseSync(currentDir, [
     enCache[key] = JSON.parse(fs.readFileSync(filepath));
 });
 
-const arCache = {};
-fs.recurseSync(currentDir, [
-    'localizations/*.ar.json',
-], (filepath, relative, filename) => {
-    if(!filename) return;
-    const key = filename.split('.')[0];
-    arCache[key] = JSON.parse(fs.readFileSync(filepath));
-});
+// const arCache = {};
+// fs.recurseSync(currentDir, [
+//     'localizations/*.ar.json',
+// ], (filepath, relative, filename) => {
+//     if(!filename) return;
+//     const key = filename.split('.')[0];
+//     arCache[key] = JSON.parse(fs.readFileSync(filepath));
+// });
 
 
 // key 值调整
@@ -43,10 +43,10 @@ for(let filename in manager.cache) {
         const newKey = `${utils.toHump(filename)}.${utils.transformStr(key)}`;
         manager.cache[filename][newKey] = manager.cache[filename][key];
         enCache[filename][newKey] = enCache[filename][key];
-        arCache[filename][newKey] = arCache[filename][key];
+        // arCache[filename][newKey] = arCache[filename][key];
         delete manager.cache[filename][key];
         delete enCache[filename][key];
-        delete arCache[filename][key];
+        // delete arCache[filename][key];
     }
 }
 
@@ -95,8 +95,8 @@ if(manager.getCache().toString() !== '{}')
 if(enCache.toString() !== '{}')
     generateLocaleFile(enCache, 'en-US');
 // 阿拉伯语
-if(arCache.toString() !== '{}')
-    generateLocaleFile(arCache, 'ar');
+// if(arCache.toString() !== '{}')
+//     generateLocaleFile(arCache, 'ar');
 
 // 复制 copy 目录的文件到当前节点
 fs.copyFile(path.join(__dirname, './copy/localize.js'), `${currentDir}/localize.js`);
