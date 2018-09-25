@@ -13,16 +13,17 @@ class EditRelationPage extends PureComponent {
     componentDidMount() {
         this.props.init();
     }
+
     onClose = () => {
         this.props.onClose();
         this.props.history.push(routes.query.url());
-    }
+    };
     onOk = () => {
         this.props.onSubmit().then(isOk => {
-            if(isOk)
-                this.onClose();
+            if(isOk) this.onClose();
         });
-    }
+    };
+
     render() {
         const {getString, updateable: submitable} = this.props;
         return (
@@ -39,15 +40,15 @@ class EditRelationPage extends PureComponent {
                         </Row>
                     </Card>
                     <Card className={`${styles.card_margin} ${styles.optionBtn}`}>
-                        <Button
-                            type="primary"
-                            disabled={!submitable}
-                            loading={this.props.submitInfo.isFetching}
-                            onClick={this.onOk}>{getString('SUBMIT')}</Button>
+                        <Button type="primary" disabled={!submitable} loading={this.props.submitInfo.isFetching} onClick={this.onOk}>
+                            {getString('SUBMIT')}
+                        </Button>
                     </Card>
                 </Spin>
                 <div className="page-toolbar">
-                    <Button type="primary" onClick={this.onClose}>{getString('RETURN')}</Button>
+                    <Button type="primary" onClick={this.onClose}>
+                        {getString('RETURN')}
+                    </Button>
                 </div>
             </div>
         );
@@ -62,13 +63,12 @@ EditRelationPage.propTypes = {
     submitInfo: PropTypes.object,
     updateable: PropTypes.bool,
     onClose: PropTypes.func,
-    onSubmit: PropTypes.func,
+    onSubmit: PropTypes.func
 };
 import {connect} from 'react-redux';
 import * as actions from '../actions.js';
 import {selectorFactory} from 'Shared/utils/immutableToJsSelectorFactory';
 import {localize} from '../localize';
-
 const getSubmitInfo = selectorFactory(['page', 'domainData', 'submitEditRelationInfo']);
 
 const mapStateToProps = state => ({
@@ -82,10 +82,17 @@ const mapDispatchToProps = dispatch => ({
     onSubmit: () => dispatch(actions.submitRelationInfo()),
     onClose: () => {
         dispatch(actions.closeEditRelationPanel());
-        dispatch(actions.onClickPageBtn({
-            pageIndex: PAGE.index
-        }));
+        dispatch(
+            actions.onClickPageBtn({
+                pageIndex: PAGE.index
+            })
+        );
     }
 });
 
-export default DragDropContext(HTML5Backend)(connect(mapStateToProps, mapDispatchToProps)(localize(EditRelationPage)));
+export default DragDropContext(HTML5Backend)(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(localize(EditRelationPage))
+);

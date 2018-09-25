@@ -6,7 +6,6 @@ import 'Shared/styles/form.css';
 import 'Shared/styles/row-col.css';
 import 'Shared/styles/table.css';
 import '../style.css';
-
 export default config => ({
     state,
     reducer: reducers,

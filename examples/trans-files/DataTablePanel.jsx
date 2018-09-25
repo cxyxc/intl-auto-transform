@@ -11,6 +11,7 @@ import routes from './routes';
 class DataTablePanel extends PureComponent {
     handleTableChange = (pagination, filters, sorter) => {
         const oldCondition = this.props.condition;
+
         if(pagination.current - 1 === oldCondition.pageIndex && pagination.pageSize === oldCondition.pageSize) {
             const condition = {
                 ...conventSorter(sorter),
@@ -18,7 +19,8 @@ class DataTablePanel extends PureComponent {
             };
             this.props.getEmployees(condition);
         }
-    }
+    };
+
     render() {
         const {getString} = this.props;
         const {data, isFetching, message: errorMessage} = this.props.employeeInfo;
@@ -29,34 +31,43 @@ class DataTablePanel extends PureComponent {
                 dataIndex: 'username',
                 sorter: true,
                 render: (text, record) => <Link to={routes.detail.format(record.userId)}>{text}</Link>
-            }, {
+            },
+            {
                 title: getString('NAME'),
                 dataIndex: 'name',
                 sorter: true
-            }, {
+            },
+            {
                 title: getString('SEX'),
                 dataIndex: 'sex',
                 render: text => conventEnumValueToString(sex, text)
-            }, {
+            },
+            {
                 title: getString('JOB_DESCRIPTION'),
                 dataIndex: 'jobDescription'
-            }, {
+            },
+            {
                 title: getString('JOB'),
                 dataIndex: 'job',
                 render: text => conventEnumValueToString(jobType, text)
-            }, {
+            },
+            {
                 title: getString('PHONE_NUMBER'),
                 dataIndex: 'phoneNumber'
-            }, {
+            },
+            {
                 title: getString('ADDRESS'),
                 dataIndex: 'address'
-            }, {
+            },
+            {
                 title: getString('ID_NUMBER'),
                 dataIndex: 'idNumber'
-            }, {
+            },
+            {
                 title: getString('DEALER_NAME'),
                 dataIndex: 'dealerName'
-            }, {
+            },
+            {
                 title: getString('STATUS'),
                 dataIndex: 'status',
                 render: text => conventEnumValueToString(employeeStatus, text)
@@ -69,17 +80,21 @@ class DataTablePanel extends PureComponent {
                 const menus = [
                     {
                         id: 'update',
-                        children: <Link key="update" to={routes.update.format(record.userId)}>{getString('EDIT')}</Link>,
+                        children: (
+                            <Link key="update" to={routes.update.format(record.userId)}>
+                                {getString('EDIT')}
+                            </Link>
+                        ),
                         primary: true,
                         hidden: !(this.props.editable && record.options && record.options.includes('update'))
-                    }];
+                    }
+                ];
                 return <DropdownMenu key={text} id={text} menus={menus} />;
             },
             width: FIXED_COLUMN_WIDTH,
             fixed: 'right'
         };
-        if(this.props.hasDataPremission)
-            columns.push(fixedColumn);
+        if(this.props.hasDataPremission) columns.push(fixedColumn);
         const pagination = {
             total: data.totalElements,
             current: pageIndex + 1,
@@ -112,7 +127,7 @@ class DataTablePanel extends PureComponent {
                     {...TABLE}
                     locale={{
                         emptyText: errorMessage ? COMMON_TABLE_QUERY_FAIL_TEXT : COMMON_TABLE_EMPTY_TEXT
-                    }} />
+                    }}/>
             </Card>
         );
     }
@@ -127,13 +142,11 @@ DataTablePanel.propTypes = {
     hasDataPremission: PropTypes.bool,
     history: PropTypes.object
 };
-
 import {connect} from 'react-redux';
 import * as actions from './actions.js';
 import {selectorFactory} from 'Shared/utils/immutableToJsSelectorFactory';
 import Immutable from 'immutable';
 import {localize} from './localize';
-
 const getData = selectorFactory(['page', 'domainData', 'employees']);
 const getCondition = selectorFactory(['page', 'appState', 'queryCondition']);
 
@@ -148,8 +161,12 @@ const mapStateToProps = state => {
         editable: permissions.includes('update')
     };
 };
+
 const mapDispatchToProps = dispatch => ({
     getEmployees: options => dispatch(actions.onClickPageBtn(options))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(localize(DataTablePanel));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(localize(DataTablePanel));

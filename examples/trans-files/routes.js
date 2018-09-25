@@ -1,6 +1,5 @@
 import {Routes} from 'Shared/utils/routeManager';
 import {getString} from './localize';
-
 const routes = {
     query: {
         url: '/',
@@ -21,5 +20,4 @@ const routes = {
         title: getString('UPDATE_RELATION')
     }
 };
-
 export default new Routes(routes);

@@ -42,11 +42,9 @@ const state = {
         }
     },
     appState: {
-        queryCondition: {
-        },
+        queryCondition: {},
         // 编辑人员信息
-        editInfo: {
-        },
+        editInfo: {},
         // 人员关系
         relations: []
     },
@@ -71,5 +69,4 @@ const state = {
     },
     notification: {}
 };
-
 export default state;

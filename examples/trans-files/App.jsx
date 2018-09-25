@@ -12,34 +12,29 @@ import DetailPage from './DetailPage';
 import EditRelationPage from './EditRelationPage';
 import 'ant-design-pro/dist/ant-design-pro.css';
 import NoMatchRoute from '../common/NoMatchRoute';
-
 export class App extends PureComponent {
     componentDidMount() {
         this.props.init();
     }
+
     componentWillReceiveProps(nextProps) {
         const preNotification = this.props.notification;
         if(preNotification.timeStamp !== nextProps.notification.timeStamp)
-            notification[nextProps.notification.type]({message: nextProps.notification.message});
+            notification[nextProps.notification.type]({
+                message: nextProps.notification.message
+            });
     }
+
     render() {
         return (
             <div>
                 <Route render={p => <Breadcrumb location={p.location} />} />
                 <div className="page-main">
                     <Switch>
-                        <Route exact path={routes.query.url()} render={p => (
-                            <QueryPage history={p.history} />
-                        )} />
-                        <Route exact path={routes.update.url()} render={p => (
-                            <EditPage id={p.match.params.id} history={p.history} />
-                        )} />
-                        <Route exact path={routes.detail.url()} render={p => (
-                            <DetailPage id={p.match.params.id} history={p.history} />
-                        )} />
-                        <Route exact path={routes.updateRelation.url()} render={p => (
-                            <EditRelationPage history={p.history} />
-                        )} />
+                        <Route exact path={routes.query.url()} render={p => <QueryPage history={p.history} />} />
+                        <Route exact path={routes.update.url()} render={p => <EditPage id={p.match.params.id} history={p.history} />} />
+                        <Route exact path={routes.detail.url()} render={p => <DetailPage id={p.match.params.id} history={p.history} />} />
+                        <Route exact path={routes.updateRelation.url()} render={p => <EditRelationPage history={p.history} />} />
                         <NoMatchRoute link={routes.query.url()} />
                     </Switch>
                 </div>
@@ -47,16 +42,13 @@ export class App extends PureComponent {
         );
     }
 }
-
 App.propTypes = {
     init: PropTypes.func,
     notification: PropTypes.object
 };
-
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import * as actions from './actions.js';
-
 const getNotification = createSelector(state => state.getIn(['page', 'notification']), data => data.toJS());
 
 const mapStateToProps = state => ({
@@ -69,4 +61,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);
