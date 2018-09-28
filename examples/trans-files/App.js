@@ -68,7 +68,7 @@ export class App extends PureComponent {
                         <Route path={routes.detail.url()} exact render={props =>
                             <div>
                                 <div className="page-toolbar">
-                                    <Button type="primary" onClick={this.props.resetPanel} href={`#${routes.query.url()}`}>{this.props.getString('RETURN')}</Button>
+                                    <Button type="primary" onClick={this.props.resetPanel} href={`#${routes.query.url()}`}>{this.props.getString('aaa')}</Button>
                                 </div>
                                 <div>
                                     <RetailContractDetail id={props.match.params.id} />

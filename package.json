@@ -6,7 +6,8 @@
   "bin": {
     "intl-auto": "index.js",
     "intl-lint": "lint.js",
-    "intl-trans-files": "trans-files.js"
+    "intl-trans-files": "trans-files.js",
+    "intl-check": "check.js"
   },
   "keywords": [],
   "author": "",
