@@ -10,12 +10,24 @@ const currentDir = process.cwd();
 
 manager.cache = JSON.parse(fs.readFileSync(path.join(currentDir, 'localizations', 'zh-CN.json')));
 
+function getEnterPlace(string) {
+    const enterArray = [];
+    for(let i = 0;i < string.length;i++) {
+        if(string[i] === '\n') {
+            enterArray.push(i);
+        }
+    }
+    return enterArray;
+} 
+
 fs.recurseSync(currentDir, [
     '**/*.js',
     '**/*.jsx',
 ], (filepath, relative, filename) => {
     if(!filename) return;
 
+    const file = fs.readFileSync(filepath).toString();
+    
     // 核心 babel 检测
     let {code} = babel.transformFileSync(filepath, {
         babelrc: false,
@@ -23,7 +35,7 @@ fs.recurseSync(currentDir, [
             path.join(__dirname, 'node_modules', '@babel/plugin-syntax-object-rest-spread'),
             path.join(__dirname, 'node_modules', '@babel/plugin-syntax-class-properties'),
             path.join(__dirname, 'node_modules', 'babel-plugin-syntax-jsx'),
-            babel.createConfigItem(require('./check-plugin')(filename, filepath)),
+            babel.createConfigItem(require('./check-plugin')(filename, filepath, getEnterPlace(file))),
         ]
     });
 });
