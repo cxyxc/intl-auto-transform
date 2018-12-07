@@ -73,3 +73,4 @@ fs.recurseSync(currentDir, [
 
 // 复制 copy 目录的文件到当前节点
 fs.copyFile(path.join(__dirname, './copy/intl.js'), `${currentDir}/intl.js`);
+fs.copyFile(path.join(__dirname, './copy/zh-CN.json'), `${currentDir}/localizations/zh-CN.json`);

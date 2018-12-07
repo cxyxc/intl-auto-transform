@@ -86,7 +86,7 @@ const ImportDeclaration = (t, filename, prefix) => path => {
     path.insertAfter(
       t.importDeclaration([
         t.importSpecifier(t.identifier(INTL), t.identifier(INTL))
-      ], t.stringLiteral(`${prefix}${INTL}`))
+      ], t.stringLiteral(`${prefix}intl`))
     );
   }
 }
