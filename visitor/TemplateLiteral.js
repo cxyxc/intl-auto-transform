@@ -35,13 +35,14 @@ const TemplateLiteral  = (t, filename) => path => {
     });
 
     const generateExpressions = () => {
-        const key = manager.setCache(path, filename, chineseQuasis.shift().value.raw);
+        const chinese = chineseQuasis.shift().value.raw;
+        const key = manager.setCache(path, filename, chinese);
         const isInReact = utils.pathInReact(path);
         newExpressions.push(
             (
                 isInReact 
-                    ? utils.propsGetStringT(t, key)
-                    : utils.getStringT(t, key)
+                    ? utils.propsFormatMessageT(t, key, chinese)
+                    : utils.formatMessageT(t, key, chinese)
             )
         );
     };

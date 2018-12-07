@@ -2,11 +2,18 @@ const manager = require('./manager');
 const utils = require('./utils');
 const TemplateLiteral = require('./visitor/TemplateLiteral');
 
-const LOCALIZE = 'localize';
+const INTL = 'injectIntl';
 
 const Literal = (t, filename) => path => {
   if(!utils.hasChinese(path.node.value)) return;
-  const key = manager.setCache(path, filename, path.node.value);
+  let flag = false;
+  path.findParent(path => {
+    if(path.isProperty() && path.node.key.name === 'defaultMessage')
+      flag = true;
+  });
+  if(flag) return;
+  const chinese = path.node.value;
+  const key = manager.setCache(path, filename, chinese);
   
   // 父节点是 import 语句时不做处理
   if(path.parent.type === 'ImportDeclaration') return;
@@ -15,7 +22,7 @@ const Literal = (t, filename) => path => {
   if(path.parent.type === 'JSXAttribute') {
     path.replaceWith(
         t.jSXExpressionContainer(
-          utils.propsGetStringT(t, key)
+          utils.propsFormatMessageT(t, key, chinese)
         )
     );
     return ;
@@ -24,27 +31,28 @@ const Literal = (t, filename) => path => {
   let isInReact = utils.pathInReact(path);
 
   if(isInReact) {
-    path.replaceWith(utils.propsGetStringT(t, key));
+    path.replaceWith(utils.propsFormatMessageT(t, key, chinese));
     return;
   }
 
-  path.replaceWith(utils.getStringT(t, key));
+  path.replaceWith(utils.formatMessageT(t, key, chinese));
   return ;
 }
 
 const JSXText = (t, filename) => path => {
+  const chinese = path.node.value;
   if(!utils.hasChinese(path.node.value)) return;
-  const key = manager.setCache(path, filename, path.node.value);
+  const key = manager.setCache(path, filename, chinese);
   path.replaceWith(
-    t.jSXExpressionContainer(utils.propsGetStringT(t, key))
+    t.jSXExpressionContainer(utils.propsFormatMessageT(t, key, chinese))
   );
 };
 
 const Identifier = (t, filename) => path => {
   let flag = false;
   path.findParent(parentPath => {
-    if(parentPath.isCallExpression() && parentPath.node.callee.name === LOCALIZE) {
-      // 发现已添加 localize()
+    if(parentPath.isCallExpression() && parentPath.node.callee.name === INTL) {
+      // 发现已添加 injectIntl()
       flag = true; return;
     }
   });
@@ -58,11 +66,11 @@ const Identifier = (t, filename) => path => {
           return;
         }
 
-        // 对 export default 的组件进行 localize 包裹
+        // 对 export default 的组件进行 intl 包裹
         // 此处认为大写字母开头的为组件
         if(utils.isBF(path.node.name[0])) {
           path.replaceWith(
-            t.callExpression(t.identifier(LOCALIZE), [path.node])
+            t.callExpression(t.identifier(INTL), [path.node])
           );
         }
       }
@@ -74,23 +82,23 @@ const Identifier = (t, filename) => path => {
 
 const ImportDeclaration = (t, filename, prefix) => path => {
   if (path.node.source.value === 'react') {
-    // 在 import react 后添加 import localize
+    // 在 import react 后添加 import intl
     path.insertAfter(
       t.importDeclaration([
-        t.importSpecifier(t.identifier(LOCALIZE), t.identifier(LOCALIZE))
-      ], t.stringLiteral(`${prefix}${LOCALIZE}`))
+        t.importSpecifier(t.identifier(INTL), t.identifier(INTL))
+      ], t.stringLiteral(`${prefix}${INTL}`))
     );
   }
 }
 
 const AssignmentExpression = (t, filename) => path => {
-  // 寻找 propTypes 添加 getString
+  // 寻找 propTypes 添加 intl
   if (path.node.left.type === 'MemberExpression' &&
     path.node.left.property.type === 'Identifier' &&
     path.node.left.property.name === 'propTypes') {
       let flag = false;
       path.node.right.properties.forEach(element => {
-        if(element.type === 'ObjectProperty' && element.key.name === 'getString')
+        if(element.type === 'ObjectProperty' && element.key.name === 'intl')
           flag = true;
       });
       if(flag) return;
@@ -102,8 +110,8 @@ const AssignmentExpression = (t, filename) => path => {
           t.objectExpression([
             ...path.node.right.properties,
             t.objectProperty(
-              t.identifier('getString'),
-              t.memberExpression(t.identifier('PropTypes'), t.identifier('func'))
+              t.identifier('intl'),
+              t.memberExpression(t.identifier('PropTypes'), t.identifier('object'))
             )
           ])
         )
@@ -121,7 +129,7 @@ module.exports = (filename, prefix) => function({ types: t }) {
         TemplateLiteral: TemplateLiteral(t, filename),
         // 获取到导出组件的语句
         Identifier: Identifier(t, filename),
-        // 添加 import {localize} from '...';
+        // 添加 import {intl} from '...';
         ImportDeclaration: ImportDeclaration(t, filename, prefix),
         // 处理 propTypes
         AssignmentExpression: AssignmentExpression(t, filename),

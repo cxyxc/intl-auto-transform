@@ -31,19 +31,42 @@ function pathInReact(path) {
 }
 
 
-// getString()
-const getStringT =  (t, key) => t.callExpression(t.identifier('getString'), [t.stringLiteral(key)]);
+// formatMessage()
+const formatMessageT =  (t, key, chinese) => t.callExpression(t.identifier('formatMessage'), [
+  t.objectExpression([
+    t.objectProperty(
+      t.identifier('id'),
+      t.stringLiteral(key)
+    ),
+    t.objectProperty(
+      t.identifier('defaultMessage'),
+      t.stringLiteral(chinese)
+    )
+  ])
+]);
 
-// this.props.getString()
-const propsGetStringT = (t, key) => t.callExpression(
+// this.props.intl.formatMessage()
+const propsFormatMessageT = (t, key, chinese) => t.callExpression(
   t.memberExpression(
     t.memberExpression(
-      t.thisExpression(),
-      t.identifier('props')
+      t.memberExpression(
+        t.thisExpression(),
+        t.identifier('props')
+      ),
+      t.identifier('intl')
     ),
-    t.identifier('getString')
+    t.identifier('formatMessage')
   ),
-  [t.stringLiteral(key)]
+  [t.objectExpression([
+    t.objectProperty(
+      t.identifier('id'),
+      t.stringLiteral(key)
+    ),
+    t.objectProperty(
+      t.identifier('defaultMessage'),
+      t.stringLiteral(chinese)
+    )
+  ])]
 );
 
 // 首字母大写转为驼峰
@@ -57,6 +80,6 @@ module.exports = {
     isBF,
     toHump,
     pathInReact,
-    getStringT,
-    propsGetStringT
+    formatMessageT,
+    propsFormatMessageT
 };

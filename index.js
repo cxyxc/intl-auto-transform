@@ -36,14 +36,19 @@ fs.recurseSync(currentDir, [
             path.join(__dirname, 'node_modules', '@babel/plugin-syntax-class-properties'),
             path.join(__dirname, 'node_modules', 'babel-plugin-syntax-jsx'),
             babel.createConfigItem(require('./plugin')(filename, prefix)),
-        ]
+        ],
+        generatorOpts: {
+            jsescOption: {
+                minimal: true
+            }
+        }
     });
 
     // 未发生过中文替换时，不保存代码
     if(Object.getOwnPropertyNames(manager.getCache(filename)).length === 0) return;
-    // 根据文件名添加 import {getString} from './localize';
+    // 根据文件名添加 import {formatMessage} from './intl';
     if(path.extname(filename) === '.js') {
-        code = `import {getString} from '${prefix}localize'\n` + code;
+        code = `import {formatMessage} from '${prefix}intl'\n` + code;
     }
 
     // ESLint 格式化
@@ -58,13 +63,13 @@ fs.recurseSync(currentDir, [
 });
 
 // 生成 localizations 多语言文件包（中文）
-const localizationKeys = Object.getOwnPropertyNames(manager.getCache());
-const fileContent = {};
-localizationKeys.forEach(key => {
-    Object.assign(fileContent, manager.getCache(key));
-});
-fs.writeFile(path.join(currentDir, 'localizations', 'zh-CN.json'),
-    JSON.stringify(fileContent, null, 4), err => err);
+// const localizationKeys = Object.getOwnPropertyNames(manager.getCache());
+// const fileContent = {};
+// localizationKeys.forEach(key => {
+//     Object.assign(fileContent, manager.getCache(key));
+// });
+// fs.writeFile(path.join(currentDir, 'localizations', 'zh-CN.json'),
+//     JSON.stringify(fileContent, null, 4), err => err);
 
 // 复制 copy 目录的文件到当前节点
-fs.copyFile(path.join(__dirname, './copy/localize.js'), `${currentDir}/localize.js`);
+fs.copyFile(path.join(__dirname, './copy/intl.js'), `${currentDir}/intl.js`);
