@@ -36,7 +36,7 @@ class App extends PureComponent {
                                         你好啊
                                     </Card>
                                     <Card>
-                                        {'尚未商城'}
+                                        尚未商城
                                         {aaa || '尚未商城'}
                                         <TablePanel history={props.history} />
                                     </Card>

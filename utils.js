@@ -32,42 +32,48 @@ function pathInReact(path) {
 
 
 // formatMessage()
-const formatMessageT =  (t, key, chinese) => t.callExpression(t.identifier('formatMessage'), [
-  t.objectExpression([
-    t.objectProperty(
-      t.identifier('id'),
-      t.stringLiteral(key)
-    ),
-    t.objectProperty(
-      t.identifier('defaultMessage'),
-      t.stringLiteral(chinese)
-    )
-  ])
-]);
+const formatMessageT =  (t, key, chinese) => {
+  const chineseTrim = chinese.trim();
+  return t.callExpression(t.identifier('formatMessage'), [
+    t.objectExpression([
+      t.objectProperty(
+        t.identifier('id'),
+        t.stringLiteral(key)
+      ),
+      t.objectProperty(
+        t.identifier('defaultMessage'),
+        t.stringLiteral(chineseTrim)
+      )
+    ])
+  ]);
+}
 
 // this.props.intl.formatMessage()
-const propsFormatMessageT = (t, key, chinese) => t.callExpression(
-  t.memberExpression(
+const propsFormatMessageT = (t, key, chinese) => {
+  const chineseTrim = chinese.trim();
+  return t.callExpression(
     t.memberExpression(
       t.memberExpression(
-        t.thisExpression(),
-        t.identifier('props')
+        t.memberExpression(
+          t.thisExpression(),
+          t.identifier('props')
+        ),
+        t.identifier('intl')
       ),
-      t.identifier('intl')
+      t.identifier('formatMessage')
     ),
-    t.identifier('formatMessage')
-  ),
-  [t.objectExpression([
-    t.objectProperty(
-      t.identifier('id'),
-      t.stringLiteral(key)
-    ),
-    t.objectProperty(
-      t.identifier('defaultMessage'),
-      t.stringLiteral(chinese)
-    )
-  ])]
-);
+    [t.objectExpression([
+      t.objectProperty(
+        t.identifier('id'),
+        t.stringLiteral(key)
+      ),
+      t.objectProperty(
+        t.identifier('defaultMessage'),
+        t.stringLiteral(chineseTrim)
+      )
+    ])]
+  )
+};
 
 // 首字母大写转为驼峰
 function toHump(string) {
