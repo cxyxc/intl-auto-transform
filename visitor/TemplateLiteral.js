@@ -37,13 +37,8 @@ const TemplateLiteral  = (t, filename) => path => {
     const generateExpressions = () => {
         const chinese = chineseQuasis.shift().value.raw;
         const key = manager.setCache(path, filename, chinese);
-        const isInReact = utils.pathInReact(path);
         newExpressions.push(
-            (
-                isInReact 
-                    ? utils.propsFormatMessageT(t, key, chinese)
-                    : utils.formatMessageT(t, key, chinese)
-            )
+            utils.formatMessageT(t, key, chinese)
         );
     };
     if(chineseQuasisIndex[0] === 0)

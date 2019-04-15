@@ -48,32 +48,6 @@ const formatMessageT =  (t, key, chinese) => {
   ]);
 }
 
-// this.props.intl.formatMessage()
-const propsFormatMessageT = (t, key, chinese) => {
-  const chineseTrim = chinese.trim();
-  return t.callExpression(
-    t.memberExpression(
-      t.memberExpression(
-        t.memberExpression(
-          t.thisExpression(),
-          t.identifier('props')
-        ),
-        t.identifier('intl')
-      ),
-      t.identifier('formatMessage')
-    ),
-    [t.objectExpression([
-      t.objectProperty(
-        t.identifier('id'),
-        t.stringLiteral(key)
-      ),
-      t.objectProperty(
-        t.identifier('defaultMessage'),
-        t.stringLiteral(chineseTrim)
-      )
-    ])]
-  )
-};
 
 // 首字母大写转为驼峰
 function toHump(string) {
